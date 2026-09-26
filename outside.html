@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Antimatter — коммерческое предложение</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f0ede8; --ink:#1a1814; --ink2:#6b6760; --ink3:#a8a49e;
+  --blue:#2563eb; --blue-d:#1d4ed8; --blue-l:#dbeafe;
+  --green:#16a34a; --green-l:#dcfce7; --amber:#d97706; --amber-l:#fef3c7;
+  --red:#dc2626; --border:#ccc8c0; --card:#fff;
+  --font:'DM Sans',sans-serif; --display:'Syne',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.5}
+a{color:var(--blue-d)}
+.wrap{max-width:980px;margin:0 auto;padding:28px 20px 80px}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:28px}
+.brand{font-family:var(--display);font-size:28px;font-weight:800;letter-spacing:-.03em}
+.brand span{color:var(--blue)}
+.sub{color:var(--ink2);font-size:13px;margin-top:4px}
+h1{font-family:var(--display);font-size:34px;line-height:1.15;letter-spacing:-.03em;margin:8px 0 10px}
+h2{font-family:var(--display);font-size:22px;margin:0 0 12px}
+.lead{color:var(--ink2);max-width:640px}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-top:28px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+label{display:block;font-size:12px;color:var(--ink2);margin-bottom:6px}
+input[type=range]{width:100%}
+.row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+.val{font-family:var(--display);font-weight:700}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.metric{background:#f7f5f2;border-radius:12px;padding:12px}
+.metric b{display:block;font-family:var(--display);font-size:18px;margin-top:2px}
+.metric span{font-size:12px;color:var(--ink2)}
+.paths{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+button,.wa{border:0;border-radius:10px;padding:12px 16px;font-family:var(--font);font-weight:600;cursor:pointer;font-size:14px}
+.primary{background:var(--blue);color:#fff}
+.primary:disabled{opacity:.45;cursor:not-allowed}
+.ghost{background:var(--blue-l);color:var(--blue-d)}
+.field{margin-bottom:10px}
+.field input,.field select{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font:inherit;background:#fff}
+.slots{display:flex;flex-direction:column;gap:8px;margin:12px 0;max-height:280px;overflow:auto}
+.slot{text-align:left;background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px 12px}
+.slot.on{border-color:var(--blue);background:var(--blue-l)}
+.note{font-size:12px;color:var(--ink2);margin-top:8px}
+.ok{background:var(--green-l);color:#14532d;border-radius:10px;padding:12px;margin-top:10px}
+.err{background:#fee2e2;color:#7f1d1d;border-radius:10px;padding:12px;margin-top:10px}
+.warn{background:var(--amber-l);color:#78350f;border-radius:10px;padding:12px;margin-top:16px;font-size:13px}
+.offer{font-size:13px;color:var(--ink2);max-height:160px;overflow:auto;border:1px solid var(--border);border-radius:10px;padding:10px;background:#fafaf8;margin:8px 0 12px}
+.check{display:flex;gap:8px;align-items:flex-start;font-size:13px;margin-bottom:12px}
+footer{margin-top:28px;font-size:12px;color:var(--ink3);display:flex;justify-content:space-between;gap:12px}
+#report{position:fixed;left:-2400px;top:0;width:720px;background:#fff;color:#1a1814;padding:36px 40px;font-family:'DM Sans',sans-serif}
+#report h1{font-size:26px;margin:0 0 6px}
+#report table{width:100%;border-collapse:collapse;margin:14px 0 18px;font-size:14px}
+#report td{padding:7px 8px;border-bottom:1px solid #e6e2dc}
+#report td:last-child{text-align:right;font-weight:600}
+@media(max-width:800px){.grid,.paths,header{grid-template-columns:1fr;display:grid}header{display:block}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="brand">Anti<span>matter</span></div>
+      <div class="sub">AI-автоматизация входящих обращений · Казахстан</div>
+    </div>
+    <a class="wa" id="waLink" hidden target="_blank" rel="noopener">Написать в WhatsApp</a>
+  </header>
+
+  <h1>Посчитайте, сколько стоит медленный ответ клиенту</h1>
+  <p class="lead">Вводные меняете сами. Отчёт скачивается одним файлом и его можно переслать тем, кто принимает решение. Запись на созвон и предзаказ — ниже.</p>
+
+  <div id="configWarn" class="warn" hidden></div>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Параметры</h2>
+      <div class="row"><label>Менеджеры на входящих</label><div class="val" id="mLabel">3</div></div>
+      <input id="managers" type="range" min="1" max="30" value="3">
+      <div class="row"><label>Горизонт, месяцев</label><div class="val" id="nLabel">12</div></div>
+      <input id="horizon" type="range" min="6" max="24" value="12" step="6">
+      <div class="field"><label>Стоимость часа менеджера, ₸</label><input id="ch" type="number" min="100" step="10" value="1430"></div>
+      <div class="field"><label>Часов, которые автоматизация снимает с одного менеджера</label><input id="hm" type="number" min="1" value="120"></div>
+      <div class="field"><label>Фактическая загрузка сотрудника (0–1)</label><input id="load" type="number" min="0.1" max="1" step="0.05" value="0.8"></div>
+      <div class="field"><label>Прочая выгода в месяц, ₸</label><input id="sm" type="number" min="0" step="1000" value="15000"></div>
+      <div class="field"><label>Разовое внедрение I0, ₸</label><input id="i0" type="number" min="0" step="1000" value="88500"></div>
+      <p class="note">Как в книге Automation-Calculator: валовая экономия = часы × менеджеры × ставка × загрузка + прочая выгода. Операционные затраты = 16% от валовой. Чистая выгода = валовая минус эти затраты. Ячейка I0 в книге сейчас число 88&nbsp;500 ₸, а не формула.</p>
+    </section>
+    <section class="card">
+      <h2>Результат</h2>
+      <div class="metrics" id="metrics"></div>
+      <p class="note" id="calcNote"></p>
+      <div class="field" style="margin-top:14px"><label>Компания на титуле отчёта</label><input id="reportCompany" placeholder="Необязательно"></div>
+      <button class="primary" id="pdfBtn" type="button" style="width:100%">Скачать отчёт PDF</button>
+      <p class="note" id="pdfMsg"></p>
+    </section>
+  </div>
+
+  <div class="paths">
+    <section class="card" id="book">
+      <h2>Созвон на 30 минут</h2>
+      <p class="note">Слот удерживается 10 минут после выбора. Подтверждение — отдельным шагом.</p>
+      <div class="field"><label>Телефон</label><input id="bookPhone" placeholder="+7 777 000 00 00"></div>
+      <div id="turnstile"></div>
+      <div class="slots" id="slotList">Загрузка слотов…</div>
+      <button class="primary" id="holdBtn" disabled>Удержать слот</button>
+      <button class="ghost" id="confirmBtn" hidden>Подтвердить запись</button>
+      <div id="bookMsg"></div>
+    </section>
+
+    <section class="card" id="preorder">
+      <h2>Предзаказ на 200$</h2>
+      <p class="note">Это не покупка готового внедрения. Это фиксация обязательства поставить технологию в ваш бизнес в течение 6 месяцев со скидкой в 3 раза к плате за интеграцию.</p>
+      <div class="offer" id="offerText"></div>
+      <label class="check"><input type="checkbox" id="acceptOffer"> Принимаю условия предзаказа</label>
+      <div class="field"><label>Имя</label><input id="pName"></div>
+      <div class="field"><label>Компания</label><input id="pCompany"></div>
+      <div class="field"><label>Телефон</label><input id="pPhone" placeholder="+7"></div>
+      <div class="field"><label>Email</label><input id="pEmail" type="email"></div>
+      <button class="primary" id="preBtn">Получить код предзаказа</button>
+      <div id="preMsg"></div>
+    </section>
+  </div>
+
+  <footer>
+    <div>Antimatter · Костанай</div>
+    <div>Триал продукта после запуска — 14 дней. Оплата Kaspi подключается после регистрации юрлица.</div>
+  </footer>
+</div>
+<article id="report" aria-hidden="true"></article>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+const CONFIG = {
+  API: 'https://6584916.xyz/webhook',
+  WA_PHONE: '',
+  TURNSTILE_SITE_KEY: ''
+};
+
+const OM_RATE = 0.16;
+
+const offer = `Предзаказ Antimatter. Сумма: 200 долларов США. После оплаты вы получаете договорное обязательство развернуть автоматизацию входящих WhatsApp и Instagram в вашей компании в течение 6 месяцев. Платёж за интеграцию по предзаказу в три раза ниже стандартных 600 долларов. До регистрации юридического лица публичная оферта не подписана заново: код заказа нужен, чтобы сопоставить платёж.`;
+document.getElementById('offerText').textContent = offer;
+
+function money(n){ return Math.round(n).toLocaleString('ru-RU'); }
+function num(id){ return parseFloat(document.getElementById(id).value); }
+
+function calc(){
+  const M = Math.max(1, parseInt(document.getElementById('managers').value, 10) || 1);
+  const n = parseInt(document.getElementById('horizon').value, 10) || 12;
+  const Ch = num('ch') || 1430;
+  const Hm = num('hm') || 120;
+  const L = num('load') || 0.8;
+  const Sm = num('sm') || 0;
+  const I0 = num('i0') || 0;
+  document.getElementById('mLabel').textContent = M;
+  document.getElementById('nLabel').textContent = n;
+  const Gross = Hm * M * Ch * L + Sm;
+  const Om = Gross * OM_RATE;
+  const B_m = Gross - Om;
+  const FTE = (Hm / (168 * L)) * M;
+  const Payback = B_m > 0 ? I0 / B_m : null;
+  const ROI_n = I0 > 0 ? (B_m * n - I0) / I0 : null;
+  const TCO = I0 + Om * n;
+  const box = document.getElementById('metrics');
+  const note = document.getElementById('calcNote');
+  if (B_m <= 0) {
+    box.innerHTML = '<div class="metric"><span>Чистая выгода</span><b>не сходится</b></div>';
+    note.textContent = 'При таких параметрах операционные затраты выше экономии.';
+    return { ok:false };
+  }
+  box.innerHTML = [
+    ['Валовая экономия', money(Gross) + ' ₸/мес'],
+    ['Операционные затраты', money(Om) + ' ₸/мес'],
+    ['Чистая выгода', money(B_m) + ' ₸/мес'],
+    ['Внедрение', money(I0) + ' ₸'],
+    ['Окупаемость', Payback.toFixed(1) + ' мес.'],
+    ['ROI за ' + n + ' мес.', (ROI_n * 100).toFixed(1) + '%'],
+    ['Стоимость владения', money(TCO) + ' ₸'],
+    ['Освобождённые ставки', FTE.toFixed(1)]
+  ].map(([k,v]) => `<div class="metric"><span>${k}</span><b>${v}</b></div>`).join('');
+  note.textContent = 'Считается по живым формулам листа «Калькулятор». NPV и IRR в книге сейчас сломаны (#REF!) и сюда не перенесены.';
+  return {
+    ok:true, M, n, Ch, Hm, L, Sm, I0, Gross, Om, B_m, FTE, TCO,
+    gross:Math.round(Gross), b_m:Math.round(B_m),
+    roi:Math.round(ROI_n * 1000) / 10,
+    payback:Math.round(Payback * 10) / 10
+  };
+}
+
+['managers','horizon','ch','hm','load','sm','i0'].forEach(id => {
+  document.getElementById(id).addEventListener('input', calc);
+});
+calc();
+
+const warns = [];
+if (!CONFIG.WA_PHONE) warns.push('Номер WhatsApp не задан: впишите его в CONFIG.WA_PHONE в начале файла.');
+else {
+  const a = document.getElementById('waLink');
+  a.hidden = false;
+  a.href = 'https://wa.me/' + CONFIG.WA_PHONE.replace(/\D/g,'');
+}
+if (!CONFIG.TURNSTILE_SITE_KEY) warns.push('Ключ Cloudflare Turnstile не задан: удержание слота на сервере не пройдёт, пока не заполните CONFIG.TURNSTILE_SITE_KEY.');
+if (warns.length) {
+  const w = document.getElementById('configWarn');
+  w.hidden = false;
+  w.textContent = warns.join(' ');
+}
+
+let slots = [];
+let picked = null;
+let turnstileToken = '';
+
+function paintSlots(){
+  const list = document.getElementById('slotList');
+  if (!slots.length) { list.textContent = 'Свободных слотов нет.'; return; }
+  list.innerHTML = '';
+  slots.forEach(s => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'slot' + (picked && String(picked.id) === String(s.id) ? ' on' : '');
+    b.textContent = `${s.day || ''} ${s.date} ${s.time} · свободно ${s.free_spots}`;
+    b.onclick = () => { picked = s; paintSlots(); document.getElementById('holdBtn').disabled = false; };
+    list.appendChild(b);
+  });
+}
+
+async function loadSlots(){
+  try {
+    const r = await fetch(CONFIG.API + '/slots-get-available');
+    const data = await r.json();
+    slots = Array.isArray(data) ? data : (data.data || []);
+  } catch (e) {
+    document.getElementById('slotList').textContent = 'Не удалось загрузить слоты. Проверьте, что n8n с публичным бэкендом запущен.';
+    return;
+  }
+  paintSlots();
+}
+loadSlots();
+
+if (CONFIG.TURNSTILE_SITE_KEY) {
+  const s = document.createElement('script');
+  s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+  s.async = true;
+  s.onload = () => {
+    turnstile.render('#turnstile', {
+      sitekey: CONFIG.TURNSTILE_SITE_KEY,
+      callback: t => { turnstileToken = t; }
+    });
+  };
+  document.head.appendChild(s);
+}
+
+function msg(id, kind, text){
+  document.getElementById(id).innerHTML = `<div class="${kind}">${text}</div>`;
+}
+
+document.getElementById('holdBtn').onclick = async () => {
+  const phone = document.getElementById('bookPhone').value.trim();
+  if (!picked) return;
+  if (phone.replace(/\D/g,'').length < 10) { msg('bookMsg','err','Укажите телефон.'); return; }
+  if (!CONFIG.TURNSTILE_SITE_KEY || !turnstileToken) {
+    msg('bookMsg','err','Нужен токен Turnstile. Вставьте site key в CONFIG и пройдите проверку.');
+    return;
+  }
+  const btn = document.getElementById('holdBtn');
+  btn.disabled = true;
+  try {
+    const r = await fetch(CONFIG.API + '/slot-hold', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ phone, slot_id: String(picked.id), turnstile_token: turnstileToken })
+    });
+    const j = await r.json();
+    if (!j.ok) { msg('bookMsg','err','Слот не удержан: ' + (j.error || r.status)); btn.disabled = false; return; }
+    msg('bookMsg','ok','Слот удержан до ' + new Date(j.hold_until).toLocaleString('ru-RU') + '. Подтвердите запись.');
+    document.getElementById('confirmBtn').hidden = false;
+  } catch (e) {
+    msg('bookMsg','err','Сеть: ' + e.message);
+    btn.disabled = false;
+  }
+};
+
+document.getElementById('confirmBtn').onclick = async () => {
+  const phone = document.getElementById('bookPhone').value.trim();
+  try {
+    const r = await fetch(CONFIG.API + '/slot-confirm', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ phone })
+    });
+    const j = await r.json();
+    if (!j.ok) { msg('bookMsg','err','Подтверждение не прошло: ' + (j.error || '')); return; }
+    msg('bookMsg','ok','Запись подтверждена. Номер брони: ' + j.booking_id);
+    document.getElementById('confirmBtn').hidden = true;
+  } catch (e) {
+    msg('bookMsg','err','Сеть: ' + e.message);
+  }
+};
+
+document.getElementById('pdfBtn').onclick = async () => {
+  const model = calc();
+  const note = document.getElementById('pdfMsg');
+  if (!model.ok) { note.textContent = 'Сначала добейтесь положительной чистой выгоды.'; return; }
+  if (typeof html2pdf !== 'function') { note.textContent = 'Библиотека PDF не загрузилась. Нужен доступ к cdnjs.cloudflare.com.'; return; }
+  const company = document.getElementById('reportCompany').value.trim();
+  const when = new Date().toLocaleString('ru-RU');
+  const rows = [
+    ['Менеджеры на входящих', String(model.M)],
+    ['Горизонт', model.n + ' мес.'],
+    ['Стоимость часа', money(model.Ch) + ' ₸'],
+    ['Часы, которые снимает автоматизация', String(model.Hm)],
+    ['Фактическая загрузка', String(model.L)],
+    ['Прочая выгода', money(model.Sm) + ' ₸/мес'],
+    ['Разовое внедрение', money(model.I0) + ' ₸'],
+    ['Валовая экономия', money(model.Gross) + ' ₸/мес'],
+    ['Операционные затраты (16%)', money(model.Om) + ' ₸/мес'],
+    ['Чистая выгода', money(model.B_m) + ' ₸/мес'],
+    ['Окупаемость', model.payback.toFixed(1) + ' мес.'],
+    ['ROI за горизонт', model.roi.toFixed(1) + '%'],
+    ['Стоимость владения', money(model.TCO) + ' ₸'],
+    ['Освобождённые ставки', model.FTE.toFixed(1)]
+  ];
+  document.getElementById('report').innerHTML =
+    '<div style="font-size:13px;letter-spacing:.08em;color:#2563eb;font-weight:700">ANTIMATTER</div>' +
+    '<h1>Отчёт о финансовой модели автоматизации</h1>' +
+    (company ? '<p>Компания: ' + company.replace(/[&<>]/g, '') + '</p>' : '<p>Открытая модель. Вводные задал автор этого файла.</p>') +
+    '<p style="color:#6b6760;font-size:13px">' + when + '</p>' +
+    '<table>' + rows.map(([k,v]) => '<tr><td>' + k + '</td><td>' + v + '</td></tr>').join('') + '</table>' +
+    '<p style="font-size:13px;color:#6b6760">Валовая экономия = часы × менеджеры × ставка часа × загрузка + прочая выгода. Операционные затраты = 16% валовой экономии. Чистая выгода = валовая минус операционные затраты. Окупаемость = внедрение / чистая выгода. ROI = (чистая выгода × горизонт − внедрение) / внедрение. Стоимость владения = внедрение + операционные затраты × горизонт. Ставки = (часы / (168 × загрузка)) × менеджеры.</p>' +
+    '<p style="font-size:13px;margin-top:10px">Antimatter не подставляет внутренние цифры компании. Этот файл собран на открытом калькуляторе.</p>';
+  const btn = document.getElementById('pdfBtn');
+  btn.disabled = true;
+  note.textContent = 'Собираю файл…';
+  try {
+    await html2pdf().set({
+      margin: 10,
+      filename: 'Antimatter-financial-model.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, backgroundColor: '#ffffff' },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    }).from(document.getElementById('report')).save();
+    note.textContent = 'Файл Antimatter-financial-model.pdf сохранён.';
+  } catch (e) {
+    note.textContent = 'Не удалось собрать PDF: ' + e.message;
+  }
+  btn.disabled = false;
+};
+
+document.getElementById('preBtn').onclick = async () => {
+  if (!document.getElementById('acceptOffer').checked) { msg('preMsg','err','Отметьте принятие условий.'); return; }
+  const model = calc();
+  if (!model.ok) { msg('preMsg','err','Сначала добейтесь положительной экономики в калькуляторе.'); return; }
+  const client = {
+    name: document.getElementById('pName').value.trim(),
+    company: document.getElementById('pCompany').value.trim(),
+    phone: document.getElementById('pPhone').value.trim(),
+    email: document.getElementById('pEmail').value.trim()
+  };
+  if (client.phone.replace(/\D/g,'').length < 10 || !client.company) {
+    msg('preMsg','err','Нужны компания и телефон.');
+    return;
+  }
+  const btn = document.getElementById('preBtn');
+  btn.disabled = true;
+  try {
+    const r = await fetch(CONFIG.API + '/preorder', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        client,
+        metrics: { gross: model.gross, roi: model.roi, payback: model.payback, b_m: model.b_m }
+      })
+    });
+    const j = await r.json();
+    if (!j.ok) { msg('preMsg','err','Заявка не принята.'); btn.disabled = false; return; }
+    msg('preMsg','ok', (j.message || 'Заявка принята.') + ' Укажите код при оплате 200$.');
+  } catch (e) {
+    msg('preMsg','err','Сеть: ' + e.message);
+    btn.disabled = false;
+  }
+};
+</script>
+</body>
+</html>

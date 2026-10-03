@@ -31,10 +31,11 @@ input[type=range]{width:100%}
 .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
 .val{font-family:var(--display);font-weight:700}
 .metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
-.metric{background:#f7f5f2;border-radius:12px;padding:12px}
-.metric b{display:block;font-family:var(--display);font-size:18px;margin-top:2px}
+.metric{background:#f7f5f2;border-radius:12px;padding:12px 14px}
+.metric b{display:block;font-family:var(--font);font-weight:650;font-size:15px;letter-spacing:0;line-height:1.2;margin-top:4px;font-stretch:normal;white-space:normal}
 .metric span{font-size:12px;color:var(--ink2)}
-.paths{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.hint{font-size:12px;color:var(--ink2);margin:-4px 0 14px;line-height:1.35}
+.paths{margin-top:16px}.calHead{display:flex;align-items:center;justify-content:space-between;margin:8px 0 10px}.calHead button{background:#fff;border:1px solid var(--border);width:36px;height:36px;border-radius:10px}.calTitle{font-weight:700}.calGrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.dow,.day{text-align:center;border-radius:10px;padding:8px 0;font-size:13px}.dow{color:var(--ink2);font-size:11px}.day{background:#f7f5f2;border:1px solid transparent}.day.has{background:#fff;border-color:var(--border);cursor:pointer}.day.on{background:var(--blue);color:#fff;border-color:var(--blue)}.day.muted{color:#c4c0ba}.times{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.time{background:#fff;border:1px solid var(--border);border-radius:10px;padding:8px 12px}.time.on{background:var(--blue-l);border-color:var(--blue)}
 button,.wa{border:0;border-radius:10px;padding:12px 16px;font-family:var(--font);font-weight:600;cursor:pointer;font-size:14px}
 .primary{background:var(--blue);color:#fff}
 .primary:disabled{opacity:.45;cursor:not-allowed}
@@ -70,29 +71,34 @@ footer{margin-top:28px;font-size:12px;color:var(--ink3);display:flex;justify-con
   </header>
 
   <h1>Посчитайте, сколько стоит медленный ответ клиенту</h1>
-  <p class="lead">Вводные меняете сами. Отчёт скачивается одним файлом и его можно переслать тем, кто принимает решение. Запись на созвон и предзаказ — ниже.</p>
-
-  <div id="configWarn" class="warn" hidden></div>
+  <p class="lead">Вводные меняете сами. Отчёт скачивается одним файлом и его можно переслать тем, кто принимает решение. Свободное время для созвона — ниже.</p>
 
   <div class="grid">
     <section class="card">
       <h2>Параметры</h2>
       <div class="row"><label>Менеджеры на входящих</label><div class="val" id="mLabel">3</div></div>
       <input id="managers" type="range" min="1" max="30" value="3">
+      <p class="hint">Сколько человек сейчас отвечает на входящие. Пример: 3.</p>
       <div class="row"><label>Горизонт, месяцев</label><div class="val" id="nLabel">12</div></div>
       <input id="horizon" type="range" min="6" max="24" value="12" step="6">
+      <p class="hint">На сколько месяцев вперёд считать выгоду. Пример: 12.</p>
       <div class="field"><label>Стоимость часа менеджера, ₸</label><input id="ch" type="number" min="100" step="10" value="1430"></div>
+      <p class="hint">Сколько стоит один час такого сотрудника. Пример: 1 430 ₸.</p>
       <div class="field"><label>Часов, которые автоматизация снимает с одного менеджера</label><input id="hm" type="number" min="1" value="120"></div>
+      <p class="hint">Сколько часов в месяц бот забирает у одного человека. Пример: 120, это около 6 часов в день.</p>
       <div class="field"><label>Фактическая загрузка сотрудника (0–1)</label><input id="load" type="number" min="0.1" max="1" step="0.05" value="0.8"></div>
+      <p class="hint">Доля времени, которая уходит на входящие. Пример: 0,8 — это 80%.</p>
       <div class="field"><label>Прочая выгода в месяц, ₸</label><input id="sm" type="number" min="0" step="1000" value="15000"></div>
-      <div class="field"><label>Разовое внедрение I0, ₸</label><input id="i0" type="number" min="0" step="1000" value="88500"></div>
-      <p class="note">Как в книге Automation-Calculator: валовая экономия = часы × менеджеры × ставка × загрузка + прочая выгода. Операционные затраты = 16% от валовой. Чистая выгода = валовая минус эти затраты. Ячейка I0 в книге сейчас число 88&nbsp;500 ₸, а не формула.</p>
+      <p class="hint">Другая экономия в месяц. Если её нет, поставьте 0. Пример: 15 000 ₸.</p>
+      <div class="field"><label>Разовое внедрение, ₸</label><input id="i0" type="number" min="0" step="1000" value="88500"></div>
+      <p class="hint">Разовый платёж за запуск. Пример: 88 500 ₸.</p>
     </section>
     <section class="card">
       <h2>Результат</h2>
       <div class="metrics" id="metrics"></div>
       <p class="note" id="calcNote"></p>
       <div class="field" style="margin-top:14px"><label>Компания на титуле отчёта</label><input id="reportCompany" placeholder="Необязательно"></div>
+      <p class="hint">Как компания будет названа в скачанном файле. Можно оставить пустым.</p>
       <button class="primary" id="pdfBtn" type="button" style="width:100%">Скачать отчёт PDF</button>
       <p class="note" id="pdfMsg"></p>
     </section>
@@ -101,26 +107,19 @@ footer{margin-top:28px;font-size:12px;color:var(--ink3);display:flex;justify-con
   <div class="paths">
     <section class="card" id="book">
       <h2>Созвон на 30 минут</h2>
-      <p class="note">Слот удерживается 10 минут после выбора. Подтверждение — отдельным шагом.</p>
-      <div class="field"><label>Телефон</label><input id="bookPhone" placeholder="+7 777 000 00 00"></div>
+      <p class="note">Время берётся из Slot Manager. Слот удерживается 10 минут после выбора, затем его нужно подтвердить.</p>
+      <div class="calHead">
+        <button type="button" id="calPrev" aria-label="Предыдущий месяц">‹</button>
+        <div class="calTitle" id="calTitle"></div>
+        <button type="button" id="calNext" aria-label="Следующий месяц">›</button>
+      </div>
+      <div class="calGrid" id="calGrid"></div>
+      <div class="times" id="timeList"></div>
+      <div class="field" style="margin-top:14px"><label>Телефон</label><input id="bookPhone" placeholder="+7 777 000 00 00"></div>
       <div id="turnstile"></div>
-      <div class="slots" id="slotList">Загрузка слотов…</div>
       <button class="primary" id="holdBtn" disabled>Удержать слот</button>
       <button class="ghost" id="confirmBtn" hidden>Подтвердить запись</button>
       <div id="bookMsg"></div>
-    </section>
-
-    <section class="card" id="preorder">
-      <h2>Предзаказ на 200$</h2>
-      <p class="note">Это не покупка готового внедрения. Это фиксация обязательства поставить технологию в ваш бизнес в течение 6 месяцев со скидкой в 3 раза к плате за интеграцию.</p>
-      <div class="offer" id="offerText"></div>
-      <label class="check"><input type="checkbox" id="acceptOffer"> Принимаю условия предзаказа</label>
-      <div class="field"><label>Имя</label><input id="pName"></div>
-      <div class="field"><label>Компания</label><input id="pCompany"></div>
-      <div class="field"><label>Телефон</label><input id="pPhone" placeholder="+7"></div>
-      <div class="field"><label>Email</label><input id="pEmail" type="email"></div>
-      <button class="primary" id="preBtn">Получить код предзаказа</button>
-      <div id="preMsg"></div>
     </section>
   </div>
 
@@ -134,14 +133,11 @@ footer{margin-top:28px;font-size:12px;color:var(--ink3);display:flex;justify-con
 <script>
 const CONFIG = {
   API: 'https://6584916.xyz/webhook',
-  WA_PHONE: '',
-  TURNSTILE_SITE_KEY: ''
+  WA_PHONE: '77004831929',
+  TURNSTILE_SITE_KEY: '0x4AAAAAAFFFlNN0VBss4Dx4'
 };
 
 const OM_RATE = 0.16;
-
-const offer = `Предзаказ Antimatter. Сумма: 200 долларов США. После оплаты вы получаете договорное обязательство развернуть автоматизацию входящих WhatsApp и Instagram в вашей компании в течение 6 месяцев. Платёж за интеграцию по предзаказу в три раза ниже стандартных 600 долларов. До регистрации юридического лица публичная оферта не подписана заново: код заказа нужен, чтобы сопоставить платёж.`;
-document.getElementById('offerText').textContent = offer;
 
 function money(n){ return Math.round(n).toLocaleString('ru-RU'); }
 function num(id){ return parseFloat(document.getElementById(id).value); }
@@ -180,7 +176,7 @@ function calc(){
     ['Стоимость владения', money(TCO) + ' ₸'],
     ['Освобождённые ставки', FTE.toFixed(1)]
   ].map(([k,v]) => `<div class="metric"><span>${k}</span><b>${v}</b></div>`).join('');
-  note.textContent = 'Считается по живым формулам листа «Калькулятор». NPV и IRR в книге сейчас сломаны (#REF!) и сюда не перенесены.';
+  note.hidden = true;
   return {
     ok:true, M, n, Ch, Hm, L, Sm, I0, Gross, Om, B_m, FTE, TCO,
     gross:Math.round(Gross), b_m:Math.round(B_m),
@@ -194,49 +190,93 @@ function calc(){
 });
 calc();
 
-const warns = [];
-if (!CONFIG.WA_PHONE) warns.push('Номер WhatsApp не задан: впишите его в CONFIG.WA_PHONE в начале файла.');
-else {
+if (CONFIG.WA_PHONE) {
   const a = document.getElementById('waLink');
   a.hidden = false;
   a.href = 'https://wa.me/' + CONFIG.WA_PHONE.replace(/\D/g,'');
 }
-if (!CONFIG.TURNSTILE_SITE_KEY) warns.push('Ключ Cloudflare Turnstile не задан: удержание слота на сервере не пройдёт, пока не заполните CONFIG.TURNSTILE_SITE_KEY.');
-if (warns.length) {
-  const w = document.getElementById('configWarn');
-  w.hidden = false;
-  w.textContent = warns.join(' ');
-}
 
 let slots = [];
 let picked = null;
+let selectedDate = '';
 let turnstileToken = '';
+const view = new Date();
+view.setDate(1);
+const MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 
-function paintSlots(){
-  const list = document.getElementById('slotList');
-  if (!slots.length) { list.textContent = 'Свободных слотов нет.'; return; }
-  list.innerHTML = '';
-  slots.forEach(s => {
+function pad(n){ return String(n).padStart(2,'0'); }
+function iso(y,m,d){ return y + '-' + pad(m) + '-' + pad(d); }
+function timesOn(date){ return slots.filter(s => s.date === date).sort((a,b) => String(a.time).localeCompare(String(b.time))); }
+
+function paintTimes(){
+  const box = document.getElementById('timeList');
+  box.innerHTML = '';
+  if (!selectedDate) return;
+  const list = timesOn(selectedDate);
+  if (!list.length) { box.textContent = 'В этот день свободного времени нет.'; return; }
+  list.forEach(s => {
     const b = document.createElement('button');
     b.type = 'button';
-    b.className = 'slot' + (picked && String(picked.id) === String(s.id) ? ' on' : '');
-    b.textContent = `${s.day || ''} ${s.date} ${s.time} · свободно ${s.free_spots}`;
-    b.onclick = () => { picked = s; paintSlots(); document.getElementById('holdBtn').disabled = false; };
-    list.appendChild(b);
+    b.className = 'time' + (picked && String(picked.id) === String(s.id) ? ' on' : '');
+    b.textContent = String(s.time || '').slice(0,5);
+    b.onclick = () => { picked = s; paintTimes(); document.getElementById('holdBtn').disabled = false; };
+    box.appendChild(b);
   });
 }
 
+function paintCalendar(){
+  const y = view.getFullYear();
+  const m = view.getMonth();
+  document.getElementById('calTitle').textContent = MONTHS[m] + ' ' + y;
+  const grid = document.getElementById('calGrid');
+  grid.innerHTML = '';
+  ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].forEach(name => {
+    const d = document.createElement('div');
+    d.className = 'dow';
+    d.textContent = name;
+    grid.appendChild(d);
+  });
+  const first = new Date(y, m, 1);
+  let lead = (first.getDay() + 6) % 7;
+  const days = new Date(y, m + 1, 0).getDate();
+  const has = new Set(slots.map(s => s.date));
+  for (let i = 0; i < lead; i++) {
+    const d = document.createElement('div');
+    d.className = 'day muted';
+    grid.appendChild(d);
+  }
+  for (let day = 1; day <= days; day++) {
+    const key = iso(y, m + 1, day);
+    const cell = document.createElement('button');
+    cell.type = 'button';
+    cell.className = 'day' + (has.has(key) ? ' has' : ' muted') + (key === selectedDate ? ' on' : '');
+    cell.textContent = String(day);
+    if (has.has(key)) cell.onclick = () => { selectedDate = key; picked = null; document.getElementById('holdBtn').disabled = true; paintCalendar(); paintTimes(); };
+    grid.appendChild(cell);
+  }
+}
+
 async function loadSlots(){
+  const box = document.getElementById('timeList');
   try {
     const r = await fetch(CONFIG.API + '/slots-get-available');
     const data = await r.json();
     slots = Array.isArray(data) ? data : (data.data || []);
   } catch (e) {
-    document.getElementById('slotList').textContent = 'Не удалось загрузить слоты. Проверьте, что n8n с публичным бэкендом запущен.';
+    box.textContent = 'Не удалось загрузить свободное время.';
+    paintCalendar();
     return;
   }
-  paintSlots();
+  if (slots.length) {
+    const first = slots.map(s => s.date).sort()[0];
+    const parts = first.split('-');
+    view.setFullYear(Number(parts[0]), Number(parts[1]) - 1, 1);
+  }
+  paintCalendar();
+  if (!slots.length) box.textContent = 'Свободного времени пока нет.';
 }
+document.getElementById('calPrev').onclick = () => { view.setMonth(view.getMonth() - 1); paintCalendar(); };
+document.getElementById('calNext').onclick = () => { view.setMonth(view.getMonth() + 1); paintCalendar(); };
 loadSlots();
 
 if (CONFIG.TURNSTILE_SITE_KEY) {
@@ -346,38 +386,6 @@ document.getElementById('pdfBtn').onclick = async () => {
   btn.disabled = false;
 };
 
-document.getElementById('preBtn').onclick = async () => {
-  if (!document.getElementById('acceptOffer').checked) { msg('preMsg','err','Отметьте принятие условий.'); return; }
-  const model = calc();
-  if (!model.ok) { msg('preMsg','err','Сначала добейтесь положительной экономики в калькуляторе.'); return; }
-  const client = {
-    name: document.getElementById('pName').value.trim(),
-    company: document.getElementById('pCompany').value.trim(),
-    phone: document.getElementById('pPhone').value.trim(),
-    email: document.getElementById('pEmail').value.trim()
-  };
-  if (client.phone.replace(/\D/g,'').length < 10 || !client.company) {
-    msg('preMsg','err','Нужны компания и телефон.');
-    return;
-  }
-  const btn = document.getElementById('preBtn');
-  btn.disabled = true;
-  try {
-    const r = await fetch(CONFIG.API + '/preorder', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        client,
-        metrics: { gross: model.gross, roi: model.roi, payback: model.payback, b_m: model.b_m }
-      })
-    });
-    const j = await r.json();
-    if (!j.ok) { msg('preMsg','err','Заявка не принята.'); btn.disabled = false; return; }
-    msg('preMsg','ok', (j.message || 'Заявка принята.') + ' Укажите код при оплате 200$.');
-  } catch (e) {
-    msg('preMsg','err','Сеть: ' + e.message);
-    btn.disabled = false;
-  }
-};
 </script>
 </body>
 </html>

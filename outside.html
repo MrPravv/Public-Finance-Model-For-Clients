@@ -27,6 +27,7 @@ h2{font-family:var(--display);font-size:22px;margin:0 0 12px}
 .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-top:28px}
 .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 label{display:block;font-size:12px;color:var(--ink2);margin-bottom:6px}
+#params label{color:var(--ink);font-size:14px}
 input[type=range]{width:100%}
 .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
 .val{font-family:var(--display);font-weight:700}
@@ -34,6 +35,7 @@ input[type=range]{width:100%}
 .metric{background:#f7f5f2;border-radius:12px;padding:12px 14px}
 .metric b{display:block;font-family:var(--font);font-weight:650;font-size:15px;letter-spacing:0;line-height:1.2;margin-top:4px;font-stretch:normal;white-space:normal}
 .metric span{font-size:12px;color:var(--ink2)}
+.metric small{display:block;margin-top:6px;font-size:12px;color:var(--ink2);font-weight:400;line-height:1.35}
 .hint{font-size:12px;color:var(--ink2);margin:-4px 0 14px;line-height:1.35}
 .paths{margin-top:16px}.calHead{display:flex;align-items:center;justify-content:space-between;margin:8px 0 10px}.calHead button{background:#fff;border:1px solid var(--border);width:36px;height:36px;border-radius:10px}.calTitle{font-weight:700}.calGrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.dow,.day{text-align:center;border-radius:10px;padding:8px 0;font-size:13px}.dow{color:var(--ink2);font-size:11px}.day{background:#f7f5f2;border:1px solid transparent}.day.has{background:#fff;border-color:var(--border);cursor:pointer}.day.on{background:var(--blue);color:#fff;border-color:var(--blue)}.day.muted{color:#c4c0ba}.times{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.time{background:#fff;border:1px solid var(--border);border-radius:10px;padding:8px 12px}.time.on{background:var(--blue-l);border-color:var(--blue)}
 button,.wa{border:0;border-radius:10px;padding:12px 16px;font-family:var(--font);font-weight:600;cursor:pointer;font-size:14px}
@@ -69,26 +71,26 @@ footer{margin-top:28px;font-size:12px;color:var(--ink3);display:flex;justify-con
     </div>
   </header>
 
-  <h1>Посчитайте, сколько стоит медленный ответ клиенту</h1>
-  <p class="lead">Вводные меняете сами. Отчёт скачивается одним файлом и его можно переслать тем, кто принимает решение. Свободное время для созвона — ниже.</p>
+  <h1>Финансовая модель автоматизации</h1>
+  <p class="lead">Чем точнее вводные данные к реальным переменным в вашей компании, тем точнее получится расчет. По умолчанию выбраны очень пессимистичные данные. Отчёт финансовой модели при выбранных параметрах скачивается одним файлом и его можно переслать тем, кто принимает решение.</p>
 
   <div class="grid">
-    <section class="card">
+    <section class="card" id="params">
       <h2>Параметры</h2>
-      <div class="row"><label>Менеджеры на входящих</label><div class="val" id="mLabel">3</div></div>
-      <input id="managers" type="range" min="1" max="30" value="3">
-      <p class="hint">Сколько человек сейчас отвечает на входящие. Пример: 3.</p>
+      <div class="row"><label>Менеджеры на входящих</label><div class="val" id="mLabel">1</div></div>
+      <input id="managers" type="range" min="1" max="30" value="1">
+      <p class="hint">Сколько человек сейчас отвечает на входящие. Пример: 1.</p>
       <div class="row"><label>Горизонт, месяцев</label><div class="val" id="nLabel">12</div></div>
       <input id="horizon" type="range" min="6" max="24" value="12" step="6">
       <p class="hint">На сколько месяцев вперёд считать выгоду. Пример: 12.</p>
-      <div class="field"><label>Стоимость часа менеджера, ₸</label><input id="ch" type="number" min="100" step="10" value="1430"></div>
-      <p class="hint">Сколько стоит один час такого сотрудника. Пример: 1 430 ₸.</p>
-      <div class="field"><label>Часов, которые автоматизация снимает с одного менеджера</label><input id="hm" type="number" min="1" value="120"></div>
-      <p class="hint">Сколько часов в месяц бот забирает у одного человека. Пример: 120, это около 6 часов в день.</p>
+      <div class="field"><label>Стоимость часа менеджера, ₸</label><input id="ch" type="number" min="100" step="10" value="1000"></div>
+      <p class="hint">Сколько стоит один час такого сотрудника. Пример: 1 000 ₸.</p>
+      <div class="field"><label>Часов, которые автоматизация снимает с одного менеджера</label><input id="hm" type="number" min="1" value="90"></div>
+      <p class="hint">Сколько часов в месяц бот забирает у одного человека. Пример: 90.</p>
       <div class="field"><label>Фактическая загрузка сотрудника (0–1)</label><input id="load" type="number" min="0.1" max="1" step="0.05" value="0.8"></div>
-      <p class="hint">Доля времени, которая уходит на входящие. Пример: 0,8 — это 80%.</p>
+      <p class="hint">В реальности сотрудник работает только часть оплаченного времени. По умолчанию 0,8.</p>
       <div class="field"><label>Прочая выгода в месяц, ₸</label><input id="sm" type="number" min="0" step="1000" value="15000"></div>
-      <p class="hint">Другая экономия в месяц. Если её нет, поставьте 0. Пример: 15 000 ₸.</p>
+      <p class="hint">Рост выручки от более быстрой обработки заказов, новые задачи для освободившегося сотрудника.</p>
       <div class="field"><label>Разовое внедрение, ₸</label><input id="i0" type="number" min="0" step="1000" value="88500"></div>
       <p class="hint">Разовый платёж за запуск. Пример: 88 500 ₸.</p>
     </section>
@@ -106,7 +108,7 @@ footer{margin-top:28px;font-size:12px;color:var(--ink3);display:flex;justify-con
   <div class="paths">
     <section class="card" id="book">
       <h2>Созвон на 30 минут</h2>
-      <p class="note">Слот удерживается 10 минут, затем его нужно будет подтвердить. Созвон не обязателен для предзаказа.</p>
+      <p class="note">Созвон не обязателен для предзаказа. Слот удерживается 10 минут, затем его нужно будет подтвердить.</p>
       <div class="calHead">
         <button type="button" id="calPrev" aria-label="Предыдущий месяц">‹</button>
         <div class="calTitle" id="calTitle"></div>
@@ -122,10 +124,6 @@ footer{margin-top:28px;font-size:12px;color:var(--ink3);display:flex;justify-con
     </section>
   </div>
 
-  <footer>
-    <div>Antimatter · Костанай</div>
-    <div>Триал продукта после запуска — 14 дней. Оплата Kaspi подключается после регистрации юрлица.</div>
-  </footer>
 </div>
 <article id="report" aria-hidden="true"></article>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -144,8 +142,8 @@ function num(id){ return parseFloat(document.getElementById(id).value); }
 function calc(){
   const M = Math.max(1, parseInt(document.getElementById('managers').value, 10) || 1);
   const n = parseInt(document.getElementById('horizon').value, 10) || 12;
-  const Ch = num('ch') || 1430;
-  const Hm = num('hm') || 120;
+  const Ch = num('ch') || 1000;
+  const Hm = num('hm') || 90;
   const L = num('load') || 0.8;
   const Sm = num('sm') || 0;
   const I0 = num('i0') || 0;
@@ -154,6 +152,7 @@ function calc(){
   const Gross = Hm * M * Ch * L + Sm;
   const Om = Gross * OM_RATE;
   const B_m = Gross - Om;
+  const B_n = B_m * n;
   const FTE = (Hm / (168 * L)) * M;
   const Payback = B_m > 0 ? I0 / B_m : null;
   const ROI_n = I0 > 0 ? (B_m * n - I0) / I0 : null;
@@ -166,15 +165,15 @@ function calc(){
     return { ok:false };
   }
   box.innerHTML = [
-    ['Валовая экономия', money(Gross) + ' ₸/мес'],
-    ['Операционные затраты', money(Om) + ' ₸/мес'],
-    ['Чистая выгода', money(B_m) + ' ₸/мес'],
-    ['Внедрение', money(I0) + ' ₸'],
-    ['Окупаемость', Payback.toFixed(1) + ' мес.'],
-    ['ROI за ' + n + ' мес.', (ROI_n * 100).toFixed(1) + '%'],
-    ['Стоимость владения', money(TCO) + ' ₸'],
-    ['Освобождённые ставки', FTE.toFixed(1)]
-  ].map(([k,v]) => `<div class="metric"><span>${k}</span><b>${v}</b></div>`).join('');
+    ['Валовая экономия', money(Gross) + ' ₸/мес', 'Сколько стоят часы, которые автоматизация снимает с менеджеров, плюс прочая выгода. Считается за месяц.'],
+    ['Операционные затраты', money(Om) + ' ₸/мес', '16% от валовой экономии. Это оценка сопровождения автоматизации за месяц.'],
+    ['Чистая выгода', money(B_n) + ' ₸', 'Валовая экономия минус операционные затраты, умноженная на выбранный горизонт.'],
+    ['Внедрение', money(I0) + ' ₸', 'Разовый платёж за запуск. В ежемесячное сопровождение не входит.'],
+    ['Окупаемость', Payback.toFixed(1) + ' мес.', 'За сколько месяцев разовый платёж возвращается чистой выгодой.'],
+    ['ROI за ' + n + ' мес.', (ROI_n * 100).toFixed(1) + '%', '100% — полный возврат вложений. Около 150% — порог, с которого решение можно рассматривать как выгодное.'],
+    ['Стоимость владения', money(TCO) + ' ₸', 'Сколько денег компания потратит на автоматизацию за выбранный горизонт с учётом поддержки.'],
+    ['Освобождённые ставки', FTE.toFixed(1), 'Сколько ставок освобождается за счёт часов, которые забирает автоматизация.']
+  ].map(([k,v,d]) => `<div class="metric"><span>${k}</span><b>${v}</b><small>${d}</small></div>`).join('');
   note.hidden = true;
   return {
     ok:true, M, n, Ch, Hm, L, Sm, I0, Gross, Om, B_m, FTE, TCO,
@@ -251,16 +250,21 @@ function paintCalendar(){
 
 async function loadSlots(){
   const box = document.getElementById('timeList');
-  try {
-    const r = await fetch(CONFIG.API + '/slots-get-available');
-    const data = await r.json();
-    if (!Array.isArray(data)) {
-      box.textContent = 'Не удалось загрузить свободное время.';
-      paintCalendar();
-      return;
-    }
-    slots = data;
-  } catch (e) {
+  box.textContent = 'Загрузка свободного времени…';
+  let loaded = false;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const r = await fetch(CONFIG.API + '/slots-get-available');
+      const data = await r.json();
+      if (Array.isArray(data)) {
+        slots = data;
+        loaded = true;
+        break;
+      }
+    } catch (e) {}
+    if (attempt < 2) await new Promise(resolve => setTimeout(resolve, 700));
+  }
+  if (!loaded) {
     box.textContent = 'Не удалось загрузить свободное время.';
     paintCalendar();
     return;
@@ -352,7 +356,7 @@ document.getElementById('pdfBtn').onclick = async () => {
     ['Разовое внедрение', money(model.I0) + ' ₸'],
     ['Валовая экономия', money(model.Gross) + ' ₸/мес'],
     ['Операционные затраты (16%)', money(model.Om) + ' ₸/мес'],
-    ['Чистая выгода', money(model.B_m) + ' ₸/мес'],
+    ['Чистая выгода за горизонт', money(model.B_m * model.n) + ' ₸'],
     ['Окупаемость', model.payback.toFixed(1) + ' мес.'],
     ['ROI за горизонт', model.roi.toFixed(1) + '%'],
     ['Стоимость владения', money(model.TCO) + ' ₸'],

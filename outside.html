@@ -67,7 +67,6 @@ footer{margin-top:28px;font-size:12px;color:var(--ink3);display:flex;justify-con
       <div class="brand">Anti<span>matter</span></div>
       <div class="sub">AI-автоматизация входящих обращений · Казахстан</div>
     </div>
-    <a class="wa" id="waLink" hidden target="_blank" rel="noopener">Написать в WhatsApp</a>
   </header>
 
   <h1>Посчитайте, сколько стоит медленный ответ клиенту</h1>
@@ -107,7 +106,7 @@ footer{margin-top:28px;font-size:12px;color:var(--ink3);display:flex;justify-con
   <div class="paths">
     <section class="card" id="book">
       <h2>Созвон на 30 минут</h2>
-      <p class="note">Время берётся из Slot Manager. Слот удерживается 10 минут после выбора, затем его нужно подтвердить.</p>
+      <p class="note">Слот удерживается 10 минут, затем его нужно будет подтвердить. Созвон не обязателен для предзаказа.</p>
       <div class="calHead">
         <button type="button" id="calPrev" aria-label="Предыдущий месяц">‹</button>
         <div class="calTitle" id="calTitle"></div>
@@ -190,12 +189,6 @@ function calc(){
 });
 calc();
 
-if (CONFIG.WA_PHONE) {
-  const a = document.getElementById('waLink');
-  a.hidden = false;
-  a.href = 'https://wa.me/' + CONFIG.WA_PHONE.replace(/\D/g,'');
-}
-
 let slots = [];
 let picked = null;
 let selectedDate = '';
@@ -261,7 +254,12 @@ async function loadSlots(){
   try {
     const r = await fetch(CONFIG.API + '/slots-get-available');
     const data = await r.json();
-    slots = Array.isArray(data) ? data : (data.data || []);
+    if (!Array.isArray(data)) {
+      box.textContent = 'Не удалось загрузить свободное время.';
+      paintCalendar();
+      return;
+    }
+    slots = data;
   } catch (e) {
     box.textContent = 'Не удалось загрузить свободное время.';
     paintCalendar();

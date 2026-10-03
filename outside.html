@@ -197,6 +197,13 @@ view.setDate(1);
 const MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 
 function pad(n){ return String(n).padStart(2,'0'); }
+function slotSpan(value){
+  const clock = String(value || '').slice(0, 5);
+  const parts = clock.split(':').map(Number);
+  if (parts.length < 2 || parts.some(n => Number.isNaN(n))) return clock;
+  const end = parts[0] * 60 + parts[1] + 30;
+  return clock + '–' + pad(Math.floor(end / 60) % 24) + ':' + pad(end % 60);
+}
 function iso(y,m,d){ return y + '-' + pad(m) + '-' + pad(d); }
 function timesOn(date){ return slots.filter(s => s.date === date).sort((a,b) => String(a.time).localeCompare(String(b.time))); }
 
@@ -210,7 +217,7 @@ function paintTimes(){
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'time' + (picked && String(picked.id) === String(s.id) ? ' on' : '');
-    b.textContent = String(s.time || '').slice(0,5);
+    b.textContent = slotSpan(s.time);
     b.onclick = () => { picked = s; paintTimes(); document.getElementById('holdBtn').disabled = false; };
     box.appendChild(b);
   });
@@ -314,7 +321,19 @@ document.getElementById('holdBtn').onclick = async () => {
       body: JSON.stringify({ phone, slot_id: String(picked.id), turnstile_token: turnstileToken })
     });
     const j = await r.json();
-    if (!j.ok) { msg('bookMsg','err','Слот не удержан: ' + (j.error || r.status)); btn.disabled = false; return; }
+    if (!j.ok) {
+      const reason = {
+        one_slot_per_phone: 'На этот телефон уже есть запись. Один человек может занять только один слот.',
+        rate_limit_phone: 'На этот телефон уже есть запись. Один человек может занять только один слот.',
+        rate_limit_ip: 'С этого адреса слишком много попыток. Подождите час.',
+        rate_limit_ip_day: 'С этого адреса на сегодня больше нельзя записываться.',
+        slot_full: 'Это время уже занято.',
+        missing_turnstile: 'Сначала пройдите проверку Cloudflare.'
+      }[j.error] || 'Слот не удержан.';
+      msg('bookMsg','err', reason);
+      btn.disabled = false;
+      return;
+    }
     msg('bookMsg','ok','Слот удержан до ' + new Date(j.hold_until).toLocaleString('ru-RU') + '. Подтвердите запись.');
     document.getElementById('confirmBtn').hidden = false;
   } catch (e) {

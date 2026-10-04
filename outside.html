@@ -1,412 +1,1311 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Antimatter — коммерческое предложение</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Antimatter — Интеграция</title>
 <style>
 :root {
-  --bg:#f0ede8; --ink:#1a1814; --ink2:#6b6760; --ink3:#a8a49e;
-  --blue:#2563eb; --blue-d:#1d4ed8; --blue-l:#dbeafe;
-  --green:#16a34a; --green-l:#dcfce7; --amber:#d97706; --amber-l:#fef3c7;
-  --red:#dc2626; --border:#ccc8c0; --card:#fff;
-  --font:'DM Sans',sans-serif; --display:'Syne',sans-serif;
+  --bg:        #080810;
+  --surface:   #0f0f1a;
+  --surface2:  #141422;
+  --border:    #1c1c30;
+  --border-hi: #3a3a6a;
+  --accent:    #5b5bd6;
+  --accent-lo: #16163a;
+  --accent-hi: #7b7bf0;
+  --text:      #e2e2f0;
+  --muted:     #5a5a80;
+  --dim:       #3a3a55;
+  --ok:        #22c55e;
+  --ok-lo:     #0a2010;
+  --err:       #ef4444;
+  --err-lo:    #200a0a;
+  --warn:      #f59e0b;
+  --mono:      'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  --sans:      'Inter', system-ui, -apple-system, sans-serif;
+  --r:         6px;
+  --r-lg:      12px;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.5}
-a{color:var(--blue-d)}
-.wrap{max-width:980px;margin:0 auto;padding:28px 20px 80px}
-header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:28px}
-.brand{font-family:var(--display);font-size:28px;font-weight:800;letter-spacing:-.03em}
-.brand span{color:var(--blue)}
-.sub{color:var(--ink2);font-size:13px;margin-top:4px}
-h1{font-family:var(--display);font-size:34px;line-height:1.15;letter-spacing:-.03em;margin:8px 0 10px}
-h2{font-family:var(--display);font-size:22px;margin:0 0 12px}
-.lead{color:var(--ink2);max-width:640px}
-.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-top:28px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-label{display:block;font-size:12px;color:var(--ink2);margin-bottom:6px}
-#params label{color:var(--ink);font-size:14px}
-input[type=range]{width:100%}
-.row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
-.val{font-family:var(--display);font-weight:700}
-.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
-.metric{background:#f7f5f2;border-radius:12px;padding:12px 14px}
-.metric b{display:block;font-family:var(--font);font-weight:650;font-size:15px;letter-spacing:0;line-height:1.2;margin-top:4px;font-stretch:normal;white-space:normal}
-.metric span{font-size:12px;color:var(--ink2)}
-.metric small{display:block;margin-top:6px;font-size:12px;color:var(--ink2);font-weight:400;line-height:1.35}
-.hint{font-size:12px;color:var(--ink2);margin:-4px 0 14px;line-height:1.35}
-.paths{margin-top:16px}.calHead{display:flex;align-items:center;justify-content:space-between;margin:8px 0 10px}.calHead button{background:#fff;border:1px solid var(--border);width:36px;height:36px;border-radius:10px}.calTitle{font-weight:700}.calGrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.dow,.day{text-align:center;border-radius:10px;padding:8px 0;font-size:13px}.dow{color:var(--ink2);font-size:11px}.day{background:#f7f5f2;border:1px solid transparent}.day.has{background:#fff;border-color:var(--border);cursor:pointer}.day.on{background:var(--blue);color:#fff;border-color:var(--blue)}.day.muted{color:#c4c0ba}.times{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.time{background:#fff;border:1px solid var(--border);border-radius:10px;padding:8px 12px}.time.on{background:var(--blue-l);border-color:var(--blue)}
-button,.wa{border:0;border-radius:10px;padding:12px 16px;font-family:var(--font);font-weight:600;cursor:pointer;font-size:14px}
-.primary{background:var(--blue);color:#fff}
-.primary:disabled{opacity:.45;cursor:not-allowed}
-.ghost{background:var(--blue-l);color:var(--blue-d)}
-.field{margin-bottom:10px}
-.field input,.field select{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font:inherit;background:#fff}
-.slots{display:flex;flex-direction:column;gap:8px;margin:12px 0;max-height:280px;overflow:auto}
-.slot{text-align:left;background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px 12px}
-.slot.on{border-color:var(--blue);background:var(--blue-l)}
-.note{font-size:12px;color:var(--ink2);margin-top:8px}
-.ok{background:var(--green-l);color:#14532d;border-radius:10px;padding:12px;margin-top:10px}
-.err{background:#fee2e2;color:#7f1d1d;border-radius:10px;padding:12px;margin-top:10px}
-.warn{background:var(--amber-l);color:#78350f;border-radius:10px;padding:12px;margin-top:16px;font-size:13px}
-.offer{font-size:13px;color:var(--ink2);max-height:160px;overflow:auto;border:1px solid var(--border);border-radius:10px;padding:10px;background:#fafaf8;margin:8px 0 12px}
-.check{display:flex;gap:8px;align-items:flex-start;font-size:13px;margin-bottom:12px}
-footer{margin-top:28px;font-size:12px;color:var(--ink3);display:flex;justify-content:space-between;gap:12px}
-#report{position:fixed;left:-2400px;top:0;width:720px;background:#fff;color:#1a1814;padding:36px 40px;font-family:'DM Sans',sans-serif}
-#report h1{font-size:26px;margin:0 0 6px}
-#report table{width:100%;border-collapse:collapse;margin:14px 0 18px;font-size:14px}
-#report td{padding:7px 8px;border-bottom:1px solid #e6e2dc}
-#report td:last-child{text-align:right;font-weight:600}
-@media(max-width:800px){.grid,.paths,header{grid-template-columns:1fr;display:grid}header{display:block}}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ── Layout ─────────────────────────────────────────────────── */
+.app {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────── */
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebar-logo {
+  padding: 0 16px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+
+.sidebar-logo .mark {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.sidebar-logo .name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  margin-top: 2px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.1s;
+  border-left: 2px solid transparent;
+  user-select: none;
+}
+
+.nav-item:hover { color: var(--text); background: var(--surface2); }
+
+.nav-item.active {
+  color: var(--accent-hi);
+  border-left-color: var(--accent);
+  background: var(--accent-lo);
+}
+
+.nav-icon { font-size: 14px; width: 18px; text-align: center; }
+
+/* ── Main ────────────────────────────────────────────────────── */
+.main {
+  padding: 32px 40px;
+  max-width: 720px;
+}
+
+.page { display: none; }
+.page.active { display: block; }
+
+.page-header {
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.page-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.page-desc {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* ── Card ────────────────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  margin-bottom: 12px;
+}
+
+.card-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 16px;
+}
+
+/* ── Field ───────────────────────────────────────────────────── */
+.field { margin-bottom: 14px; }
+.field:last-child { margin-bottom: 0; }
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+label {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+
+.badge {
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.badge-req  { background: var(--accent-lo); color: var(--accent-hi); border: 1px solid var(--accent); }
+.badge-opt  { background: var(--surface2);  color: var(--dim);       border: 1px solid var(--border); }
+
+input[type="text"], input[type="password"] {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 9px 12px;
+  outline: none;
+  transition: border-color 0.12s;
+}
+
+input::placeholder { color: var(--dim); font-family: var(--sans); font-size: 11px; }
+input:focus { border-color: var(--accent); }
+input.v-ok  { border-color: var(--ok); }
+input.v-err { border-color: var(--err); }
+
+.field-hint {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.field-hint code {
+  font-family: var(--mono);
+  font-size: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.field-err {
+  font-size: 11px;
+  color: var(--err);
+  margin-top: 4px;
+  display: none;
+}
+
+/* ── Channels ────────────────────────────────────────────────── */
+.channels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.channel {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px;
+  transition: border-color 0.12s, background 0.12s;
+}
+
+.channel.filled {
+  border-color: var(--ok);
+  background: var(--ok-lo);
+}
+
+.ch-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.ch-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 0.12s;
+  flex-shrink: 0;
+}
+
+.channel.filled .ch-dot { background: var(--ok); }
+
+.ch-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  transition: color 0.12s;
+}
+
+.channel.filled .ch-name { color: var(--text); }
+
+.ch-opt {
+  font-size: 9px;
+  color: var(--dim);
+  margin-left: auto;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.channel input { margin-top: 0; }
+
+/* ── KB Files ────────────────────────────────────────────────── */
+.kb-entries { display: flex; flex-direction: column; gap: 6px; }
+
+.kb-entry {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.kb-entry input { flex: 1; }
+
+.btn-icon {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  color: var(--muted);
+  cursor: pointer;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+  transition: all 0.1s;
+}
+
+.btn-icon:hover { border-color: var(--err); color: var(--err); }
+
+.btn-add-kb {
+  background: none;
+  border: 1px dashed var(--border);
+  border-radius: var(--r);
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 11px;
+  padding: 7px 12px;
+  width: 100%;
+  text-align: left;
+  margin-top: 6px;
+  transition: all 0.1s;
+  font-family: var(--sans);
+}
+
+.btn-add-kb:hover { border-color: var(--accent); color: var(--accent-hi); }
+
+/* ── Buttons ─────────────────────────────────────────────────── */
+.btn {
+  border: none;
+  border-radius: var(--r);
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 20px;
+  transition: all 0.12s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  width: 100%;
+  justify-content: center;
+  padding: 12px;
+  margin-top: 16px;
+}
+
+.btn-primary:hover:not(:disabled) { background: var(--accent-hi); }
+.btn-primary:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.btn-ghost {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
+  padding: 7px 14px;
+}
+
+.btn-ghost:hover { border-color: var(--border-hi); color: var(--text); }
+
+.btn-danger {
+  background: var(--err-lo);
+  border: 1px solid var(--err);
+  color: var(--err);
+  font-size: 11px;
+  padding: 6px 12px;
+}
+
+.btn-danger:hover { background: var(--err); color: #fff; }
+
+.spinner {
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.25);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  display: none;
+}
+
+.btn-primary.loading .spinner { display: block; }
+.btn-primary.loading .btn-text::after { content: '...'; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Alert ───────────────────────────────────────────────────── */
+.alert {
+  border-radius: var(--r);
+  padding: 12px 14px;
+  font-size: 12px;
+  margin-bottom: 12px;
+  display: none;
+  line-height: 1.5;
+}
+
+.alert.show { display: block; }
+.alert-err  { background: var(--err-lo); border: 1px solid var(--err); color: #ff8080; }
+.alert-ok   { background: var(--ok-lo);  border: 1px solid var(--ok);  color: #80ff80; }
+
+/* ── Result ──────────────────────────────────────────────────── */
+.result-grid {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 6px 12px;
+  align-items: center;
+}
+
+.result-key {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.result-val {
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  word-break: break-all;
+  transition: border-color 0.1s;
+  color: var(--text);
+}
+
+.result-val:hover { border-color: var(--accent); }
+.result-val.copied { border-color: var(--ok); color: var(--ok); }
+
+.copy-tip {
+  font-size: 10px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* ── Clients list (Recent) ────────────────────────────────────── */
+.clients-list { display: flex; flex-direction: column; gap: 8px; }
+
+.client-row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: border-color 0.1s;
+}
+
+.client-row:hover { border-color: var(--border-hi); }
+
+.client-row.expired {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.client-info { flex: 1; min-width: 0; }
+
+.client-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.client-meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.client-timer {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 42px;
+  text-align: right;
+}
+
+.client-timer.green { color: var(--ok); }
+.client-timer.yellow { color: var(--warn); }
+.client-timer.red { color: var(--err); }
+
+.client-actions { display: flex; gap: 6px; }
+
+.empty-state {
+  text-align: center;
+  padding: 60px 0;
+  color: var(--muted);
+}
+
+.empty-state .icon { font-size: 32px; margin-bottom: 12px; }
+.empty-state .text { font-size: 13px; }
+.empty-state .sub  { font-size: 11px; color: var(--dim); margin-top: 4px; }
+
+/* ── Edit modal ──────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(8,8,16,0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+}
+
+.modal-overlay.show { display: flex; }
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border-hi);
+  border-radius: var(--r-lg);
+  padding: 24px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.modal-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Confirm ─────────────────────────────────────────────────── */
+.confirm-overlay {
+  position: fixed; inset: 0;
+  background: rgba(8,8,16,0.9);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.confirm-overlay.show { display: flex; }
+
+.confirm-box {
+  background: var(--surface);
+  border: 1px solid var(--err);
+  border-radius: var(--r-lg);
+  padding: 24px;
+  width: 360px;
+  text-align: center;
+}
+
+.confirm-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.confirm-desc {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.confirm-btns {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .main { padding: 20px; }
+  .field-row, .channels { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div>
-      <div class="brand">Anti<span>matter</span></div>
-      <div class="sub">AI-автоматизация входящих обращений · Казахстан</div>
+
+<div class="app">
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="mark">Antimatter · Internal</div>
+      <div class="name">Интеграция</div>
     </div>
-  </header>
+    <div class="nav-item active" onclick="showPage('create')">
+      <span class="nav-icon">＋</span> Новый клиент
+    </div>
+    <div class="nav-item" onclick="showPage('recent')">
+      <span class="nav-icon">⏱</span> Последние <span id="recentBadge" style="display:none;margin-left:auto;background:var(--accent-lo);color:var(--accent-hi);border:1px solid var(--accent);border-radius:10px;padding:0 6px;font-size:10px;font-family:var(--mono)"></span>
+    </div>
+  </nav>
 
-  <h1>Финансовая модель автоматизации</h1>
-  <p class="lead">Чем точнее вводные данные к реальным переменным в вашей компании, тем точнее получится расчет. По умолчанию выбраны очень пессимистичные данные. Отчёт финансовой модели при выбранных параметрах скачивается одним файлом и его можно переслать тем, кто принимает решение.</p>
+  <!-- Main -->
+  <main class="main">
 
-  <div class="grid">
-    <section class="card" id="params">
-      <h2>Параметры</h2>
-      <div class="row"><label>Менеджеры на входящих</label><div class="val" id="mLabel">1</div></div>
-      <input id="managers" type="range" min="1" max="30" value="1">
-      <p class="hint">Сколько человек сейчас отвечает на входящие. Пример: 1.</p>
-      <div class="row"><label>Горизонт, месяцев</label><div class="val" id="nLabel">12</div></div>
-      <input id="horizon" type="range" min="6" max="24" value="12" step="6">
-      <p class="hint">На сколько месяцев вперёд считать выгоду. Пример: 12.</p>
-      <div class="field"><label>Стоимость часа менеджера, ₸</label><input id="ch" type="number" min="100" step="10" value="1000"></div>
-      <p class="hint">Сколько стоит один час такого сотрудника. Пример: 1 000 ₸.</p>
-      <div class="field"><label>Часов, которые автоматизация снимает с одного менеджера</label><input id="hm" type="number" min="1" value="90"></div>
-      <p class="hint">Сколько часов в месяц бот забирает у одного человека. Пример: 90.</p>
-      <div class="field"><label>Фактическая загрузка сотрудника (0–1)</label><input id="load" type="number" min="0.1" max="1" step="0.05" value="0.8"></div>
-      <p class="hint">В реальности сотрудник работает только часть оплаченного времени. По умолчанию 0,8.</p>
-      <div class="field"><label>Прочая выгода в месяц, ₸</label><input id="sm" type="number" min="0" step="1000" value="15000"></div>
-      <p class="hint">Рост выручки от более быстрой обработки заказов, новые задачи для освободившегося сотрудника.</p>
-      <div class="field"><label>Разовое внедрение, ₸</label><input id="i0" type="number" min="0" step="1000" value="88500"></div>
-      <p class="hint">Разовый платёж за запуск. Пример: 88 500 ₸.</p>
-    </section>
-    <section class="card">
-      <h2>Результат</h2>
-      <div class="metrics" id="metrics"></div>
-      <p class="note" id="calcNote"></p>
-      <div class="field" style="margin-top:14px"><label>Компания на титуле отчёта</label><input id="reportCompany" placeholder="Необязательно"></div>
-      <p class="hint">Как компания будет названа в скачанном файле. Можно оставить пустым.</p>
-      <button class="primary" id="pdfBtn" type="button" style="width:100%">Скачать отчёт PDF</button>
-      <p class="note" id="pdfMsg"></p>
-    </section>
-  </div>
-
-  <div class="paths">
-    <section class="card" id="book">
-      <h2>Созвон на 30 минут</h2>
-      <p class="note">Созвон не обязателен для предзаказа. Слот удерживается 10 минут, затем его нужно будет подтвердить.</p>
-      <div class="calHead">
-        <button type="button" id="calPrev" aria-label="Предыдущий месяц">‹</button>
-        <div class="calTitle" id="calTitle"></div>
-        <button type="button" id="calNext" aria-label="Следующий месяц">›</button>
+    <!-- ══ СТРАНИЦА: Новый клиент ══ -->
+    <div class="page active" id="page-create">
+      <div class="page-header">
+        <div class="page-title">Подключить клиента</div>
+        <div class="page-desc">Сначала скажите клиенту, что создать в его Google Drive и что прислать. Папку, таблицу и инструкции за клиента не создаём. Потом вставьте присланные id в поля ниже.</div>
       </div>
-      <div class="calGrid" id="calGrid"></div>
-      <div class="times" id="timeList"></div>
-      <div class="field" style="margin-top:14px"><label>Телефон</label><input id="bookPhone" placeholder="+7 777 000 00 00"></div>
-      <div id="turnstile"></div>
-      <button class="primary" id="holdBtn" disabled>Удержать слот</button>
-      <button class="ghost" id="confirmBtn" hidden>Подтвердить запись</button>
-      <div id="bookMsg"></div>
-    </section>
-  </div>
 
+      <div id="createAlert" class="alert"></div>
+
+      <div class="card">
+        <div class="card-title">Что сказать клиенту</div>
+        <p class="page-desc">Клиент делает это у себя. В чат уходит смысл, не инструкция «создайте за меня».</p>
+        <ol class="page-desc" style="padding-left:18px;line-height:1.55">
+          <li>Папка в Google Drive клиента, доступ на редактирование, ссылка в ответ.</li>
+          <li>В папке — таблица для обращений, ссылка в ответ.</li>
+          <li>Google-документ с ценами, адресом, графиком и тем, чего бот говорить не должен.</li>
+          <li>Прайс или FAQ — по желанию, тем же способом.</li>
+          <li>Один канал: WhatsApp или Instagram. Второй не обязателен, чтобы срок в 6 месяцев снова пошёл.</li>
+        </ol>
+      </div>
+
+      <div id="createForm">
+
+        <!-- 1. Клиент -->
+        <div class="card">
+          <div class="card-title">Клиент</div>
+
+          <div class="field">
+            <label>Название компании <span class="badge badge-req">обязательно</span></label>
+            <input type="text" id="c_client_name" placeholder="Салон красоты Элегант"
+                   oninput="liveValidate(this, validateName)">
+            <div class="field-err" id="err_c_client_name"></div>
+          </div>
+
+          <div class="field">
+            <label>Telegram Chat ID <span class="badge badge-opt">опционально</span></label>
+            <input type="text" id="c_tg_chat_id" placeholder="-100123456789"
+                   oninput="liveValidate(this, validateTgId)">
+            <div class="field-hint">Менеджер пишет <code>@userinfobot</code> → копирует свой ID</div>
+            <div class="field-err" id="err_c_tg_chat_id"></div>
+          </div>
+        </div>
+
+        <!-- 2. Google -->
+        <div class="card">
+          <div class="card-title">Google</div>
+          <div class="field-hint" style="margin-bottom:14px;">Клиент создаёт таблицу и файл инструкций, присылает ID.</div>
+
+          <div class="field">
+            <label>ID Google Sheets таблицы <span class="badge badge-req">обязательно</span></label>
+            <input type="text" id="c_sheets_id"
+                   placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms"
+                   oninput="liveValidate(this, validateGoogleId)">
+            <div class="field-hint">URL таблицы → часть между <code>/d/</code> и <code>/edit</code></div>
+            <div class="field-err" id="err_c_sheets_id"></div>
+          </div>
+
+          <div class="field">
+            <label>File ID файла инструкций <span class="badge badge-req">обязательно</span></label>
+            <input type="text" id="c_instructions_file_id"
+                   placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs"
+                   oninput="liveValidate(this, validateGoogleId)">
+            <div class="field-hint">Файл <code>instructions.txt</code> → URL → часть после <code>/d/</code></div>
+            <div class="field-err" id="err_c_instructions_file_id"></div>
+          </div>
+
+          <div class="field">
+            <label>File ID документов базы знаний <span class="badge badge-opt">опционально</span></label>
+            <div class="kb-entries" id="c_kbList">
+              <div class="kb-entry">
+                <input type="text" placeholder="File ID документа (FAQ, прайс...)"
+                       oninput="liveValidate(this, validateGoogleId)">
+                <button class="btn-icon" onclick="removeKb(this, 'c_kbList')" title="Удалить">×</button>
+              </div>
+            </div>
+            <button class="btn-add-kb" onclick="addKb('c_kbList')">+ Добавить документ</button>
+          </div>
+        </div>
+
+        <!-- 3. Каналы -->
+        <div class="card">
+          <div class="card-title">Каналы связи</div>
+          <div class="field-hint" style="margin-bottom:14px;">Минимум один канал. Незаполненные отключатся автоматически.</div>
+
+          <div class="channels">
+            <div class="channel" id="c_waBlock">
+              <div class="ch-header">
+                <div class="ch-dot"></div>
+                <div class="ch-name">WhatsApp</div>
+                <div class="ch-opt">опционально</div>
+              </div>
+              <input type="text" id="c_wa_api_key" placeholder="Wasender API Key"
+                     oninput="onChannelInput(this, 'c_waBlock', validateApiKey)">
+              <div class="field-err" id="err_c_wa_api_key"></div>
+            </div>
+
+            <div class="channel" id="c_igBlock">
+              <div class="ch-header">
+                <div class="ch-dot"></div>
+                <div class="ch-name">Instagram</div>
+                <div class="ch-opt">опционально</div>
+              </div>
+              <input type="text" id="c_meta_token" placeholder="Meta Page Access Token"
+                     oninput="onChannelInput(this, 'c_igBlock', validateMetaToken)">
+              <div class="field-err" id="err_c_meta_token"></div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="createBtn" onclick="submitCreate()">
+          <span class="spinner"></span>
+          <span class="btn-text">Подключить клиента</span>
+        </button>
+
+      </div>
+
+      <!-- Результат создания -->
+      <div id="createResult" style="display:none;">
+        <div class="card">
+          <div class="card-title" style="color:var(--ok)">✓ Клиент подключён</div>
+          <div class="result-grid" id="createResultGrid"></div>
+          <div class="copy-tip">Нажми на значение чтобы скопировать</div>
+        </div>
+        <button class="btn btn-ghost" onclick="resetCreate()" style="margin-top:8px;width:100%;justify-content:center;">
+          Подключить следующего клиента
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ СТРАНИЦА: Последние ══ -->
+    <div class="page" id="page-recent">
+      <div class="page-header">
+        <div class="page-title">Последние подключения</div>
+        <div class="page-desc">Доступны действия только для клиентов подключённых менее 20 минут назад.</div>
+      </div>
+
+      <div id="recentAlert" class="alert"></div>
+      <div class="clients-list" id="clientsList">
+        <div class="empty-state">
+          <div class="icon">⏳</div>
+          <div class="text">Загрузка...</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
 </div>
-<article id="report" aria-hidden="true"></article>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<!-- ══ MODAL: Редактировать ══ -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Редактировать клиента</div>
+      <button class="btn-icon" onclick="closeEdit()" style="width:28px;height:28px;font-size:18px;">×</button>
+    </div>
+
+    <input type="hidden" id="e_numeric_id">
+    <input type="hidden" id="e_workflow_id">
+    <input type="hidden" id="e_slug">
+
+    <div id="editAlert" class="alert"></div>
+
+    <div class="field">
+      <label>Название компании <span class="badge badge-req">обязательно</span></label>
+      <input type="text" id="e_client_name" oninput="liveValidate(this, validateName)">
+      <div class="field-err" id="err_e_client_name"></div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>ID Google Sheets <span class="badge badge-req">обязательно</span></label>
+        <input type="text" id="e_sheets_id" oninput="liveValidate(this, validateGoogleId)">
+        <div class="field-err" id="err_e_sheets_id"></div>
+      </div>
+      <div class="field">
+        <label>File ID инструкций <span class="badge badge-req">обязательно</span></label>
+        <input type="text" id="e_instructions_file_id" oninput="liveValidate(this, validateGoogleId)">
+        <div class="field-err" id="err_e_instructions_file_id"></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>File ID документов KB <span class="badge badge-opt">опционально</span></label>
+      <div class="kb-entries" id="e_kbList">
+        <div class="kb-entry">
+          <input type="text" placeholder="File ID" oninput="liveValidate(this, validateGoogleId)">
+          <button class="btn-icon" onclick="removeKb(this, 'e_kbList')">×</button>
+        </div>
+      </div>
+      <button class="btn-add-kb" onclick="addKb('e_kbList')">+ Добавить документ</button>
+    </div>
+
+    <div class="channels" style="margin-top:4px;">
+      <div class="channel" id="e_waBlock">
+        <div class="ch-header">
+          <div class="ch-dot"></div>
+          <div class="ch-name">WhatsApp</div>
+        </div>
+        <input type="text" id="e_wa_api_key" placeholder="Wasender API Key"
+               oninput="onChannelInput(this, 'e_waBlock', validateApiKey)">
+        <div class="field-err" id="err_e_wa_api_key"></div>
+      </div>
+      <div class="channel" id="e_igBlock">
+        <div class="ch-header">
+          <div class="ch-dot"></div>
+          <div class="ch-name">Instagram</div>
+        </div>
+        <input type="text" id="e_meta_token" placeholder="Meta Page Access Token"
+               oninput="onChannelInput(this, 'e_igBlock', validateMetaToken)">
+        <div class="field-err" id="err_e_meta_token"></div>
+      </div>
+    </div>
+
+    <div class="field" style="margin-top:14px;">
+      <label>Telegram Chat ID <span class="badge badge-opt">опционально</span></label>
+      <input type="text" id="e_tg_chat_id" oninput="liveValidate(this, validateTgId)">
+      <div class="field-err" id="err_e_tg_chat_id"></div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeEdit()">Отмена</button>
+      <button class="btn btn-primary" id="saveEditBtn" onclick="submitUpdate()" style="margin-top:0;flex:1;">
+        <span class="spinner"></span>
+        <span class="btn-text">Сохранить</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONFIRM: Удалить ══ -->
+<div class="confirm-overlay" id="confirmDelete">
+  <div class="confirm-box">
+    <div class="confirm-title">Удалить клиента?</div>
+    <div class="confirm-desc" id="confirmDesc"></div>
+    <div class="confirm-btns">
+      <button class="btn btn-ghost" onclick="closeConfirm()">Отмена</button>
+      <button class="btn btn-danger" id="confirmBtn" onclick="confirmDeleteAction()">Удалить</button>
+    </div>
+  </div>
+</div>
+
 <script>
-const CONFIG = {
-  API: 'https://6584916.xyz/webhook',
-  WA_PHONE: '77004831929',
-  TURNSTILE_SITE_KEY: '0x4AAAAAAFFFlNN0VBss4Dx4'
-};
+const API = 'https://6584916.xyz/webhook';
+let recentClients = [];
+let deleteTarget = null;
+let refreshTimer = null;
 
-const OM_RATE = 0.16;
+// ════════════════════════════════════════════════════════════
+// НАВИГАЦИЯ
+// ════════════════════════════════════════════════════════════
 
-function money(n){ return Math.round(n).toLocaleString('ru-RU'); }
-function num(id){ return parseFloat(document.getElementById(id).value); }
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(`page-${name}`).classList.add('active');
+  document.querySelectorAll('.nav-item')[name === 'create' ? 0 : 1].classList.add('active');
+  if (name === 'recent') loadRecent();
+}
 
-function calc(){
-  const M = Math.max(1, parseInt(document.getElementById('managers').value, 10) || 1);
-  const n = parseInt(document.getElementById('horizon').value, 10) || 12;
-  const Ch = num('ch') || 1000;
-  const Hm = num('hm') || 90;
-  const L = num('load') || 0.8;
-  const Sm = num('sm') || 0;
-  const I0 = num('i0') || 0;
-  document.getElementById('mLabel').textContent = M;
-  document.getElementById('nLabel').textContent = n;
-  const Gross = Hm * M * Ch * L + Sm;
-  const Om = Gross * OM_RATE;
-  const B_m = Gross - Om;
-  const B_n = B_m * n;
-  const FTE = (Hm / (168 * L)) * M;
-  const Payback = B_m > 0 ? I0 / B_m : null;
-  const ROI_n = I0 > 0 ? (B_m * n - I0) / I0 : null;
-  const TCO = I0 + Om * n;
-  const box = document.getElementById('metrics');
-  const note = document.getElementById('calcNote');
-  if (B_m <= 0) {
-    box.innerHTML = '<div class="metric"><span>Чистая выгода</span><b>не сходится</b></div>';
-    note.textContent = 'При таких параметрах операционные затраты выше экономии.';
-    return { ok:false };
+// ════════════════════════════════════════════════════════════
+// ВАЛИДАТОРЫ
+// ════════════════════════════════════════════════════════════
+
+function validateName(v) {
+  if (!v.trim()) return 'Введите название компании';
+  if (v.trim().length < 2) return 'Минимум 2 символа';
+  return null;
+}
+
+function validateGoogleId(v) {
+  if (!v.trim()) return null; // опциональные поля не валидируем если пусты
+  // Google ID: буквы, цифры, дефис, подчёркивание, 20-60 символов
+  if (!/^[A-Za-z0-9_\-]{20,60}$/.test(v.trim()))
+    return 'Неверный формат ID. Скопируйте из URL Google Drive/Sheets';
+  return null;
+}
+
+function validateGoogleIdRequired(v) {
+  if (!v.trim()) return 'Обязательное поле';
+  return validateGoogleId(v);
+}
+
+function validateMetaToken(v) {
+  if (!v.trim()) return null;
+  if (!v.trim().startsWith('EAA'))
+    return 'Meta токен начинается с EAA';
+  if (v.trim().length < 50)
+    return 'Токен слишком короткий';
+  return null;
+}
+
+function validateApiKey(v) {
+  if (!v.trim()) return null;
+  if (v.trim().length < 10) return 'Ключ слишком короткий';
+  return null;
+}
+
+function validateTgId(v) {
+  if (!v.trim()) return null;
+  if (!/^-?[0-9]{5,15}$/.test(v.trim()))
+    return 'Только цифры, может начинаться с минуса (группы)';
+  return null;
+}
+
+function liveValidate(input, validator) {
+  const err = validator(input.value);
+  const errEl = document.getElementById('err_' + input.id);
+  if (err) {
+    input.classList.add('v-err'); input.classList.remove('v-ok');
+    if (errEl) { errEl.textContent = err; errEl.style.display = 'block'; }
+  } else if (input.value.trim()) {
+    input.classList.add('v-ok'); input.classList.remove('v-err');
+    if (errEl) errEl.style.display = 'none';
+  } else {
+    input.classList.remove('v-ok', 'v-err');
+    if (errEl) errEl.style.display = 'none';
   }
-  box.innerHTML = [
-    ['Валовая экономия', money(Gross) + ' ₸/мес', 'Сколько стоят часы, которые автоматизация снимает с менеджеров, плюс прочая выгода. Считается за месяц.'],
-    ['Операционные затраты', money(Om) + ' ₸/мес', '16% от валовой экономии. Это оценка сопровождения автоматизации за месяц.'],
-    ['Чистая выгода', money(B_n) + ' ₸', 'Валовая экономия минус операционные затраты, умноженная на выбранный горизонт.'],
-    ['Внедрение', money(I0) + ' ₸', 'Разовый платёж за запуск. В ежемесячное сопровождение не входит.'],
-    ['Окупаемость', Payback.toFixed(1) + ' мес.', 'За сколько месяцев разовый платёж возвращается чистой выгодой.'],
-    ['ROI за ' + n + ' мес.', (ROI_n * 100).toFixed(1) + '%', '100% — полный возврат вложений. Около 150% — порог, с которого решение можно рассматривать как выгодное.'],
-    ['Стоимость владения', money(TCO) + ' ₸', 'Сколько денег компания потратит на автоматизацию за выбранный горизонт с учётом поддержки.'],
-    ['Освобождённые ставки', FTE.toFixed(1), 'Сколько ставок освобождается за счёт часов, которые забирает автоматизация.']
-  ].map(([k,v,d]) => `<div class="metric"><span>${k}</span><b>${v}</b><small>${d}</small></div>`).join('');
-  note.hidden = true;
+}
+
+function onChannelInput(input, blockId, validator) {
+  liveValidate(input, validator);
+  document.getElementById(blockId).classList.toggle('filled', !!input.value.trim());
+}
+
+// ════════════════════════════════════════════════════════════
+// KB FILES
+// ════════════════════════════════════════════════════════════
+
+function addKb(listId) {
+  const list = document.getElementById(listId);
+  const item = document.createElement('div');
+  item.className = 'kb-entry';
+  item.innerHTML = `
+    <input type="text" placeholder="File ID документа"
+           oninput="liveValidate(this, validateGoogleId)">
+    <button class="btn-icon" onclick="removeKb(this, '${listId}')">×</button>
+  `;
+  list.appendChild(item);
+}
+
+function removeKb(btn, listId) {
+  const list = document.getElementById(listId);
+  if (list.children.length > 1) {
+    btn.closest('.kb-entry').remove();
+  } else {
+    btn.closest('.kb-entry').querySelector('input').value = '';
+  }
+}
+
+function getKbIds(listId) {
+  return Array.from(document.querySelectorAll(`#${listId} input`))
+    .map(i => i.value.trim()).filter(Boolean).join(',');
+}
+
+function setKbIds(listId, ids) {
+  const list = document.getElementById(listId);
+  list.innerHTML = '';
+  const parts = ids ? ids.split(',').map(s => s.trim()).filter(Boolean) : [''];
+  parts.forEach(id => {
+    const item = document.createElement('div');
+    item.className = 'kb-entry';
+    item.innerHTML = `
+      <input type="text" placeholder="File ID документа" value="${id}"
+             oninput="liveValidate(this, validateGoogleId)">
+      <button class="btn-icon" onclick="removeKb(this, '${listId}')">×</button>
+    `;
+    list.appendChild(item);
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// СБОР И ПОЛНАЯ ВАЛИДАЦИЯ ФОРМЫ
+// ════════════════════════════════════════════════════════════
+
+function collectForm(prefix) {
   return {
-    ok:true, M, n, Ch, Hm, L, Sm, I0, Gross, Om, B_m, FTE, TCO,
-    gross:Math.round(Gross), b_m:Math.round(B_m),
-    roi:Math.round(ROI_n * 1000) / 10,
-    payback:Math.round(Payback * 10) / 10
+    client_name:           document.getElementById(`${prefix}client_name`).value.trim(),
+    sheets_id:             document.getElementById(`${prefix}sheets_id`).value.trim(),
+    instructions_file_id:  document.getElementById(`${prefix}instructions_file_id`).value.trim(),
+    kb_file_ids:           getKbIds(`${prefix}kbList`),
+    wa_api_key:            document.getElementById(`${prefix}wa_api_key`).value.trim(),
+    meta_token:            document.getElementById(`${prefix}meta_token`).value.trim(),
+    tg_chat_id:            document.getElementById(`${prefix}tg_chat_id`).value.trim(),
   };
 }
 
-['managers','horizon','ch','hm','load','sm','i0'].forEach(id => {
-  document.getElementById(id).addEventListener('input', calc);
-});
-calc();
+function fullValidate(data, alertId) {
+  const errs = [];
+  if (validateName(data.client_name)) errs.push('Введите корректное название компании');
+  if (validateGoogleIdRequired(data.sheets_id)) errs.push('Неверный ID Google Sheets таблицы');
+  if (validateGoogleIdRequired(data.instructions_file_id)) errs.push('Неверный File ID инструкций');
+  if (!data.wa_api_key && !data.meta_token) errs.push('Укажите API ключ хотя бы одного канала');
+  if (data.meta_token && validateMetaToken(data.meta_token)) errs.push('Неверный формат Meta токена (должен начинаться с EAA)');
+  if (data.tg_chat_id && validateTgId(data.tg_chat_id)) errs.push('Неверный Telegram Chat ID');
 
-let slots = [];
-let picked = null;
-let selectedDate = '';
-let turnstileToken = '';
-const view = new Date();
-view.setDate(1);
-const MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-
-function pad(n){ return String(n).padStart(2,'0'); }
-function slotSpan(value){
-  const clock = String(value || '').slice(0, 5);
-  const parts = clock.split(':').map(Number);
-  if (parts.length < 2 || parts.some(n => Number.isNaN(n))) return clock;
-  const end = parts[0] * 60 + parts[1] + 30;
-  return clock + '–' + pad(Math.floor(end / 60) % 24) + ':' + pad(end % 60);
+  if (errs.length) {
+    showAlert(alertId, 'err', errs.map(e => `• ${e}`).join('<br>'));
+    return false;
+  }
+  hideAlert(alertId);
+  return true;
 }
-function iso(y,m,d){ return y + '-' + pad(m) + '-' + pad(d); }
-function timesOn(date){ return slots.filter(s => s.date === date).sort((a,b) => String(a.time).localeCompare(String(b.time))); }
 
-function paintTimes(){
-  const box = document.getElementById('timeList');
-  box.innerHTML = '';
-  if (!selectedDate) return;
-  const list = timesOn(selectedDate);
-  if (!list.length) { box.textContent = 'В этот день свободного времени нет.'; return; }
-  list.forEach(s => {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'time' + (picked && String(picked.id) === String(s.id) ? ' on' : '');
-    b.textContent = slotSpan(s.time);
-    b.onclick = () => { picked = s; paintTimes(); document.getElementById('holdBtn').disabled = false; };
-    box.appendChild(b);
+// ════════════════════════════════════════════════════════════
+// ALERTS
+// ════════════════════════════════════════════════════════════
+
+function showAlert(id, type, msg) {
+  const el = document.getElementById(id);
+  el.className = `alert alert-${type} show`;
+  el.innerHTML = msg;
+}
+
+function hideAlert(id) {
+  document.getElementById(id).className = 'alert';
+}
+
+// ════════════════════════════════════════════════════════════
+// COPY
+// ════════════════════════════════════════════════════════════
+
+function copyVal(el) {
+  navigator.clipboard.writeText(el.textContent).then(() => {
+    el.classList.add('copied');
+    setTimeout(() => el.classList.remove('copied'), 1500);
   });
 }
 
-function paintCalendar(){
-  const y = view.getFullYear();
-  const m = view.getMonth();
-  document.getElementById('calTitle').textContent = MONTHS[m] + ' ' + y;
-  const grid = document.getElementById('calGrid');
-  grid.innerHTML = '';
-  ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].forEach(name => {
-    const d = document.createElement('div');
-    d.className = 'dow';
-    d.textContent = name;
-    grid.appendChild(d);
-  });
-  const first = new Date(y, m, 1);
-  let lead = (first.getDay() + 6) % 7;
-  const days = new Date(y, m + 1, 0).getDate();
-  const has = new Set(slots.map(s => s.date));
-  for (let i = 0; i < lead; i++) {
-    const d = document.createElement('div');
-    d.className = 'day muted';
-    grid.appendChild(d);
-  }
-  for (let day = 1; day <= days; day++) {
-    const key = iso(y, m + 1, day);
-    const cell = document.createElement('button');
-    cell.type = 'button';
-    cell.className = 'day' + (has.has(key) ? ' has' : ' muted') + (key === selectedDate ? ' on' : '');
-    cell.textContent = String(day);
-    if (has.has(key)) cell.onclick = () => { selectedDate = key; picked = null; document.getElementById('holdBtn').disabled = true; paintCalendar(); paintTimes(); };
-    grid.appendChild(cell);
-  }
+function resultRow(key, val) {
+  return `<div class="result-key">${key}</div>
+          <div class="result-val" onclick="copyVal(this)">${val || '—'}</div>`;
 }
 
-async function loadSlots(){
-  const box = document.getElementById('timeList');
-  box.textContent = 'Загрузка свободного времени…';
-  let loaded = false;
-  for (let attempt = 0; attempt < 3; attempt++) {
-    try {
-      const r = await fetch(CONFIG.API + '/slots-get-available');
-      const data = await r.json();
-      if (Array.isArray(data)) {
-        slots = data;
-        loaded = true;
-        break;
-      }
-    } catch (e) {}
-    if (attempt < 2) await new Promise(resolve => setTimeout(resolve, 700));
-  }
-  if (!loaded) {
-    box.textContent = 'Не удалось загрузить свободное время.';
-    paintCalendar();
-    return;
-  }
-  if (slots.length) {
-    const first = slots.map(s => s.date).sort()[0];
-    const parts = first.split('-');
-    view.setFullYear(Number(parts[0]), Number(parts[1]) - 1, 1);
-  }
-  paintCalendar();
-  if (!slots.length) box.textContent = 'Свободного времени пока нет.';
-}
-document.getElementById('calPrev').onclick = () => { view.setMonth(view.getMonth() - 1); paintCalendar(); };
-document.getElementById('calNext').onclick = () => { view.setMonth(view.getMonth() + 1); paintCalendar(); };
-loadSlots();
+// ════════════════════════════════════════════════════════════
+// СОЗДАНИЕ КЛИЕНТА
+// ════════════════════════════════════════════════════════════
 
-if (CONFIG.TURNSTILE_SITE_KEY) {
-  const s = document.createElement('script');
-  s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
-  s.async = true;
-  s.onload = () => {
-    turnstile.render('#turnstile', {
-      sitekey: CONFIG.TURNSTILE_SITE_KEY,
-      callback: t => { turnstileToken = t; }
-    });
-  };
-  document.head.appendChild(s);
-}
+async function submitCreate() {
+  const data = collectForm('c_');
+  if (!fullValidate(data, 'createAlert')) return;
 
-function msg(id, kind, text){
-  document.getElementById(id).innerHTML = `<div class="${kind}">${text}</div>`;
-}
-
-document.getElementById('holdBtn').onclick = async () => {
-  const phone = document.getElementById('bookPhone').value.trim();
-  if (!picked) return;
-  if (phone.replace(/\D/g,'').length < 10) { msg('bookMsg','err','Укажите телефон.'); return; }
-  if (!CONFIG.TURNSTILE_SITE_KEY || !turnstileToken) {
-    msg('bookMsg','err','Нужен токен Turnstile. Вставьте site key в CONFIG и пройдите проверку.');
-    return;
-  }
-  const btn = document.getElementById('holdBtn');
+  const btn = document.getElementById('createBtn');
   btn.disabled = true;
+  btn.classList.add('loading');
+
   try {
-    const r = await fetch(CONFIG.API + '/slot-hold', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ phone, slot_id: String(picked.id), turnstile_token: turnstileToken })
+    const res = await fetch(`${API}/onboarding-create-client`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
     });
-    const j = await r.json();
-    if (!j.ok) {
-      const reason = {
-        one_slot_per_phone: 'На этот телефон уже есть запись. Один человек может занять только один слот.',
-        rate_limit_phone: 'На этот телефон уже есть запись. Один человек может занять только один слот.',
-        rate_limit_ip: 'С этого адреса слишком много попыток. Подождите час.',
-        rate_limit_ip_day: 'С этого адреса на сегодня больше нельзя записываться.',
-        slot_full: 'Это время уже занято.',
-        missing_turnstile: 'Сначала пройдите проверку Cloudflare.'
-      }[j.error] || 'Слот не удержан.';
-      msg('bookMsg','err', reason);
-      btn.disabled = false;
-      return;
+    const json = await res.json();
+
+    if (json.success) {
+      document.getElementById('createForm').style.display = 'none';
+      document.getElementById('createResult').style.display = 'block';
+      document.getElementById('createResultGrid').innerHTML = [
+        resultRow('client_id',   json.client_id),
+        resultRow('slug',        json.slug),
+        resultRow('workflow_id', json.workflow_id),
+        resultRow('webhook WA',  json.webhook_wa),
+        resultRow('webhook IG',  json.webhook_ig),
+      ].join('');
+    } else {
+      showAlert('createAlert', 'err', json.error || 'Неизвестная ошибка');
     }
-    msg('bookMsg','ok','Слот удержан до ' + new Date(j.hold_until).toLocaleString('ru-RU') + '. Подтвердите запись.');
-    document.getElementById('confirmBtn').hidden = false;
   } catch (e) {
-    msg('bookMsg','err','Сеть: ' + e.message);
+    showAlert('createAlert', 'err', 'Не удалось связаться с сервером');
+  } finally {
     btn.disabled = false;
+    btn.classList.remove('loading');
   }
-};
+}
 
-document.getElementById('confirmBtn').onclick = async () => {
-  const phone = document.getElementById('bookPhone').value.trim();
+function resetCreate() {
+  document.getElementById('createForm').style.display = 'block';
+  document.getElementById('createResult').style.display = 'none';
+  document.querySelectorAll('#page-create input[type="text"]').forEach(i => {
+    i.value = '';
+    i.classList.remove('v-ok','v-err');
+  });
+  document.getElementById('c_waBlock').classList.remove('filled');
+  document.getElementById('c_igBlock').classList.remove('filled');
+  setKbIds('c_kbList', '');
+  hideAlert('createAlert');
+}
+
+// ════════════════════════════════════════════════════════════
+// ПОСЛЕДНИЕ КЛИЕНТЫ
+// ════════════════════════════════════════════════════════════
+
+async function loadRecent() {
   try {
-    const r = await fetch(CONFIG.API + '/slot-confirm', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ phone })
-    });
-    const j = await r.json();
-    if (!j.ok) { msg('bookMsg','err','Подтверждение не прошло: ' + (j.error || '')); return; }
-    msg('bookMsg','ok','Запись подтверждена. Номер брони: ' + j.booking_id);
-    document.getElementById('confirmBtn').hidden = true;
+    const res = await fetch(`${API}/onboarding-get-recent`);
+    const json = await res.json();
+    recentClients = json.clients || [];
+    renderClients();
   } catch (e) {
-    msg('bookMsg','err','Сеть: ' + e.message);
+    document.getElementById('clientsList').innerHTML = `
+      <div class="empty-state">
+        <div class="icon">⚠️</div>
+        <div class="text">Не удалось загрузить список</div>
+        <div class="sub">Проверьте подключение к серверу</div>
+      </div>`;
   }
-};
+}
 
-document.getElementById('pdfBtn').onclick = async () => {
-  const model = calc();
-  const note = document.getElementById('pdfMsg');
-  if (!model.ok) { note.textContent = 'Сначала добейтесь положительной чистой выгоды.'; return; }
-  if (typeof html2pdf !== 'function') { note.textContent = 'Библиотека PDF не загрузилась. Нужен доступ к cdnjs.cloudflare.com.'; return; }
-  const company = document.getElementById('reportCompany').value.trim();
-  const when = new Date().toLocaleString('ru-RU');
-  const rows = [
-    ['Менеджеры на входящих', String(model.M)],
-    ['Горизонт', model.n + ' мес.'],
-    ['Стоимость часа', money(model.Ch) + ' ₸'],
-    ['Часы, которые снимает автоматизация', String(model.Hm)],
-    ['Фактическая загрузка', String(model.L)],
-    ['Прочая выгода', money(model.Sm) + ' ₸/мес'],
-    ['Разовое внедрение', money(model.I0) + ' ₸'],
-    ['Валовая экономия', money(model.Gross) + ' ₸/мес'],
-    ['Операционные затраты (16%)', money(model.Om) + ' ₸/мес'],
-    ['Чистая выгода за горизонт', money(model.B_m * model.n) + ' ₸'],
-    ['Окупаемость', model.payback.toFixed(1) + ' мес.'],
-    ['ROI за горизонт', model.roi.toFixed(1) + '%'],
-    ['Стоимость владения', money(model.TCO) + ' ₸'],
-    ['Освобождённые ставки', model.FTE.toFixed(1)]
-  ];
-  document.getElementById('report').innerHTML =
-    '<div style="font-size:13px;letter-spacing:.08em;color:#2563eb;font-weight:700">ANTIMATTER</div>' +
-    '<h1>Отчёт о финансовой модели автоматизации</h1>' +
-    (company ? '<p>Компания: ' + company.replace(/[&<>]/g, '') + '</p>' : '<p>Открытая модель. Вводные задал автор этого файла.</p>') +
-    '<p style="color:#6b6760;font-size:13px">' + when + '</p>' +
-    '<table>' + rows.map(([k,v]) => '<tr><td>' + k + '</td><td>' + v + '</td></tr>').join('') + '</table>' +
-    '<p style="font-size:13px;color:#6b6760">Валовая экономия = часы × менеджеры × ставка часа × загрузка + прочая выгода. Операционные затраты = 16% валовой экономии. Чистая выгода = валовая минус операционные затраты. Окупаемость = внедрение / чистая выгода. ROI = (чистая выгода × горизонт − внедрение) / внедрение. Стоимость владения = внедрение + операционные затраты × горизонт. Ставки = (часы / (168 × загрузка)) × менеджеры.</p>' +
-    '<p style="font-size:13px;margin-top:10px">Antimatter не подставляет внутренние цифры компании. Этот файл собран на открытом калькуляторе.</p>';
-  const btn = document.getElementById('pdfBtn');
+function renderClients() {
+  const list = document.getElementById('clientsList');
+  const now = Date.now();
+  const WINDOW = 20 * 60 * 1000; // 20 минут
+
+  // Только клиенты из последних 24 часов для отображения
+  const recent = recentClients.filter(c => {
+    const age = now - new Date(c.connected_at).getTime();
+    return age < 24 * 60 * 60 * 1000;
+  });
+
+  // Обновляем бейдж
+  const active = recent.filter(c => (now - new Date(c.connected_at).getTime()) < WINDOW).length;
+  const badge = document.getElementById('recentBadge');
+  if (active > 0) {
+    badge.textContent = active;
+    badge.style.display = '';
+  } else {
+    badge.style.display = 'none';
+  }
+
+  if (recent.length === 0) {
+    list.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">📭</div>
+        <div class="text">Нет недавних подключений</div>
+        <div class="sub">Подключённые клиенты появятся здесь</div>
+      </div>`;
+    return;
+  }
+
+  list.innerHTML = recent.map(client => {
+    const age = now - new Date(client.connected_at).getTime();
+    const canEdit = age < WINDOW;
+    const mins = Math.floor(age / 60000);
+    const secs = Math.floor((age % 60000) / 1000);
+    const timeStr = canEdit
+      ? `${String(19 - mins).padStart(2,'0')}:${String(59 - secs).padStart(2,'0')}`
+      : `${mins}м`;
+    const timerClass = canEdit
+      ? (mins < 10 ? 'green' : mins < 16 ? 'yellow' : 'red')
+      : '';
+
+    const channels = [
+      client.wa_api_key ? '📱 WA' : '',
+      client.meta_token ? '📸 IG' : ''
+    ].filter(Boolean).join(' · ');
+
+    return `
+      <div class="client-row ${canEdit ? '' : 'expired'}">
+        <div class="client-info">
+          <div class="client-name">${client.client_name}</div>
+          <div class="client-meta">#${client.numeric_id} · ${client.slug} · ${channels}</div>
+        </div>
+        <div class="client-timer ${timerClass}" title="${canEdit ? 'Осталось времени' : 'Истёк срок редактирования'}">${timeStr}</div>
+        <div class="client-actions">
+          ${canEdit ? `
+            <button class="btn btn-ghost" onclick="openEdit(${JSON.stringify(client).replace(/"/g,'&quot;')})" title="Редактировать">✎</button>
+            <button class="btn btn-danger" onclick="openConfirmDelete('${client.numeric_id}','${client.workflow_id}','${client.client_name}')" title="Удалить">✕</button>
+          ` : '<span style="font-size:11px;color:var(--dim)">истёк</span>'}
+        </div>
+      </div>`;
+  }).join('');
+
+  // Перезапускаем таймер
+  if (refreshTimer) clearInterval(refreshTimer);
+  refreshTimer = setInterval(renderClients, 60000);
+}
+
+// ════════════════════════════════════════════════════════════
+// РЕДАКТИРОВАНИЕ
+// ════════════════════════════════════════════════════════════
+
+function openEdit(client) {
+  document.getElementById('e_numeric_id').value = client.numeric_id;
+  document.getElementById('e_workflow_id').value = client.workflow_id;
+  document.getElementById('e_slug').value = client.slug;
+  document.getElementById('e_client_name').value = client.client_name;
+  document.getElementById('e_sheets_id').value = client.sheets_id;
+  document.getElementById('e_instructions_file_id').value = client.instructions_file_id;
+  document.getElementById('e_wa_api_key').value = client.wa_api_key || '';
+  document.getElementById('e_meta_token').value = client.meta_token || '';
+  document.getElementById('e_tg_chat_id').value = client.tg_chat_id || '';
+  setKbIds('e_kbList', client.kb_file_ids || '');
+
+  // Подсветка каналов
+  document.getElementById('e_waBlock').classList.toggle('filled', !!client.wa_api_key);
+  document.getElementById('e_igBlock').classList.toggle('filled', !!client.meta_token);
+
+  // Сбрасываем классы валидации
+  document.querySelectorAll('#editModal input[type="text"]').forEach(i => {
+    i.classList.remove('v-ok','v-err');
+  });
+  hideAlert('editAlert');
+  document.getElementById('editModal').classList.add('show');
+}
+
+function closeEdit() {
+  document.getElementById('editModal').classList.remove('show');
+}
+
+async function submitUpdate() {
+  const data = collectForm('e_');
+  if (!fullValidate(data, 'editAlert')) return;
+
+  data.numeric_id  = document.getElementById('e_numeric_id').value;
+  data.workflow_id = document.getElementById('e_workflow_id').value;
+  data.slug        = document.getElementById('e_slug').value;
+
+  const btn = document.getElementById('saveEditBtn');
   btn.disabled = true;
-  note.textContent = 'Собираю файл…';
-  try {
-    await html2pdf().set({
-      margin: 10,
-      filename: 'Antimatter-financial-model.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, backgroundColor: '#ffffff' },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    }).from(document.getElementById('report')).save();
-    note.textContent = 'Файл Antimatter-financial-model.pdf сохранён.';
-  } catch (e) {
-    note.textContent = 'Не удалось собрать PDF: ' + e.message;
-  }
-  btn.disabled = false;
-};
+  btn.classList.add('loading');
 
+  try {
+    const res = await fetch(`${API}/onboarding-update-client`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const json = await res.json();
+
+    if (json.success) {
+      closeEdit();
+      showAlert('recentAlert', 'ok', `✓ Клиент <b>${data.client_name}</b> обновлён`);
+      loadRecent();
+    } else {
+      showAlert('editAlert', 'err', json.error || 'Ошибка обновления');
+    }
+  } catch (e) {
+    showAlert('editAlert', 'err', 'Не удалось связаться с сервером');
+  } finally {
+    btn.disabled = false;
+    btn.classList.remove('loading');
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+// УДАЛЕНИЕ
+// ════════════════════════════════════════════════════════════
+
+function openConfirmDelete(numeric_id, workflow_id, name) {
+  deleteTarget = { numeric_id, workflow_id, name };
+  document.getElementById('confirmDesc').textContent =
+    `Workflow клиента "${name}" будет деактивирован. Это действие необратимо.`;
+  document.getElementById('confirmDelete').classList.add('show');
+}
+
+function closeConfirm() {
+  document.getElementById('confirmDelete').classList.remove('show');
+  deleteTarget = null;
+}
+
+async function confirmDeleteAction() {
+  if (!deleteTarget) return;
+  const btn = document.getElementById('confirmBtn');
+  btn.disabled = true;
+  btn.textContent = 'Удаляю...';
+
+  try {
+    const res = await fetch(`${API}/onboarding-delete-client`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(deleteTarget)
+    });
+    const json = await res.json();
+
+    if (json.success) {
+      closeConfirm();
+      showAlert('recentAlert', 'ok', `✓ Клиент "${deleteTarget.name}" удалён`);
+      loadRecent();
+    } else {
+      closeConfirm();
+      showAlert('recentAlert', 'err', json.error || 'Ошибка удаления');
+    }
+  } catch (e) {
+    closeConfirm();
+    showAlert('recentAlert', 'err', 'Не удалось связаться с сервером');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Удалить';
+  }
+}
 </script>
+
 </body>
 </html>

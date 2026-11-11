@@ -53,7 +53,6 @@ button,.wa{border:0;border-radius:10px;padding:12px 16px;font-family:var(--font)
 .ok{background:var(--green-l);color:#14532d;border-radius:10px;padding:12px;margin-top:10px}
 .err{background:#fee2e2;color:#7f1d1d;border-radius:10px;padding:12px;margin-top:10px}
 .warn{background:var(--amber-l);color:#78350f;border-radius:10px;padding:12px;margin-top:16px;font-size:13px}
-.offer{font-size:13px;color:var(--ink2);max-height:160px;overflow:auto;border:1px solid var(--border);border-radius:10px;padding:10px;background:#fafaf8;margin:8px 0 12px}
 .check{display:flex;gap:8px;align-items:flex-start;font-size:13px;margin-bottom:12px}
 footer{margin-top:28px;font-size:12px;color:var(--ink3);display:flex;justify-content:space-between;gap:12px}
 #report{position:fixed;left:-2400px;top:0;width:720px;background:#fff;color:#1a1814;padding:36px 40px;font-family:'DM Sans',sans-serif}
@@ -76,7 +75,7 @@ footer{margin-top:28px;font-size:12px;color:var(--ink3);display:flex;justify-con
 
   <h1>Посчитайте, сколько стоит медленный ответ клиенту</h1>
   <p class="lead">Вводные меняете сами. Цифра появляется после кнопки «Посчитать». Отчёт скачивается после этого расчёта. Ниже открывается копия продукта: 7 дней на вашем канале, долю новых диалогов выбираете ползунком, затем один полный месяц вперёд.</p>
-  <p class="warn">Цифры калькулятора задаёте вы. База месяца фиксируется кодом заказа и потом не снижается. Отдельной платы за интеграцию нет. Предзаказ на 89 000 тенге остаётся отдельным режимом и свёрнут внизу.</p>
+  <p class="warn">Цифры калькулятора задаёте вы. База месяца фиксируется кодом заказа и потом не снижается. Отдельной платы за интеграцию нет.</p>
 
   <div class="grid">
     <section class="card">
@@ -84,9 +83,6 @@ footer{margin-top:28px;font-size:12px;color:var(--ink3);display:flex;justify-con
       <div class="row"><label>Менеджеры на входящих</label><div class="val" id="mLabel">3</div></div>
       <input id="managers" type="range" min="1" max="30" value="3">
       <p class="hint">Сколько человек сейчас отвечает на входящие. Пример: 3.</p>
-      <div class="row"><label>Горизонт, месяцев</label><div class="val" id="nLabel">12</div></div>
-      <input id="horizon" type="range" min="6" max="24" value="12" step="6">
-      <p class="hint">На сколько месяцев вперёд считать выгоду. Пример: 12.</p>
       <div class="field"><label>Стоимость часа менеджера, ₸</label><input id="ch" type="number" min="100" step="10" value="1430"></div>
       <p class="hint">Сколько стоит один час такого сотрудника. Пример: 1 430 ₸.</p>
       <div class="field"><label>Часов, которые автоматизация снимает с одного менеджера</label><input id="hm" type="number" min="1" value="120"></div>
@@ -95,8 +91,6 @@ footer{margin-top:28px;font-size:12px;color:var(--ink3);display:flex;justify-con
       <p class="hint">Доля времени, которая уходит на входящие. Пример: 0,8 — это 80%.</p>
       <div class="field"><label>Прочая выгода в месяц, ₸</label><input id="sm" type="number" min="0" step="1000" value="15000"></div>
       <p class="hint">Другая экономия в месяц. Если её нет, поставьте 0. Пример: 15 000 ₸.</p>
-      <div class="field"><label>Разовая затрата в модели, ₸</label><input id="i0" type="number" min="0" step="1000" value="0"></div>
-      <p class="hint">Antimatter за интеграцию отдельно не берёт. Поле нужно, только если хотите прикинуть свою разовую затрату.</p>
     </section>
     <section class="card">
       <h2>Результат</h2>
@@ -140,20 +134,6 @@ footer{margin-top:28px;font-size:12px;color:var(--ink3);display:flex;justify-con
       <div id="bookMsg"></div>
     </section>
 
-    <section class="card" id="preorder">
-      <details>
-      <summary>Предзаказ на 89 000 тенге</summary>
-      <p class="note">Отдельный режим для будущих продуктов. Это не покупка текущего внедрения, а обязательство поставить технологию в течение 6 месяцев. Текущая продажа — блок «Продукт» выше.</p>
-      <div class="offer" id="offerText"></div>
-      <label class="check"><input type="checkbox" id="acceptOffer"> Принимаю условия предзаказа</label>
-      <div class="field"><label>Имя</label><input id="pName"></div>
-      <div class="field"><label>Компания</label><input id="pCompany"></div>
-      <div class="field"><label>Телефон</label><input id="pPhone" placeholder="+7"></div>
-      <div class="field"><label>Email</label><input id="pEmail" type="email"></div>
-      <button class="primary" id="preBtn" type="button">Получить код предзаказа</button>
-      <div id="preMsg"></div>
-      </details>
-    </section>
   </div>
 
   <footer>
@@ -172,57 +152,40 @@ const CONFIG = {
 
 const OM_RATE = 0.16;
 
-const offer = `Предзаказ Antimatter. Сумма: 89 000 тенге. Это отдельный режим для будущих продуктов, не оплата текущей копии. После оплаты остаётся договорное обязательство развернуть автоматизацию входящих WhatsApp и Instagram в течение 6 месяцев. До регистрации юридического лица публичная оферта не подписана заново: код заказа нужен, чтобы сопоставить платёж.`;
-document.getElementById('offerText').textContent = offer;
-
 function money(n){ return Math.round(n).toLocaleString('ru-RU'); }
 function num(id){ return parseFloat(document.getElementById(id).value); }
 
 function calc(){
   const M = Math.max(1, parseInt(document.getElementById('managers').value, 10) || 1);
-  const n = parseInt(document.getElementById('horizon').value, 10) || 12;
   const Ch = num('ch') || 1430;
   const Hm = num('hm') || 120;
   const L = num('load') || 0.8;
   const Sm = num('sm') || 0;
-  const I0 = num('i0') || 0;
   document.getElementById('mLabel').textContent = M;
-  document.getElementById('nLabel').textContent = n;
   const Gross = Hm * M * Ch * L + Sm;
   const Om = Gross * OM_RATE;
   const B_m = Gross - Om;
   const FTE = (Hm / (168 * L)) * M;
-  const Payback = B_m > 0 ? I0 / B_m : null;
-  const ROI_n = I0 > 0 ? (B_m * n - I0) / I0 : null;
-  const TCO = I0 + Om * n;
   const box = document.getElementById('metrics');
   const note = document.getElementById('calcNote');
-  if (B_m <= 0) {
+  if (!(Gross > 0) || !(B_m > 0)) {
     box.innerHTML = '<div class="metric"><span>Чистая выгода</span><b>не сходится</b></div>';
-    note.textContent = 'При таких параметрах операционные затраты выше экономии.';
+    note.hidden = false;
+    note.textContent = 'При таких параметрах месяц получается не меньше экономии.';
     return { ok:false };
   }
   box.innerHTML = [
     ['Валовая экономия', money(Gross) + ' ₸/мес'],
-    ['Операционные затраты', money(Om) + ' ₸/мес'],
+    ['Месяц', money(Om) + ' ₸'],
     ['Чистая выгода', money(B_m) + ' ₸/мес'],
-    ['Разовая затрата', money(I0) + ' ₸'],
-    ['Окупаемость', I0 > 0 ? Payback.toFixed(1) + ' мес.' : 'нет разового платежа'],
-    ['ROI за ' + n + ' мес.', I0 > 0 ? (ROI_n * 100).toFixed(1) + '%' : 'нет разового платежа'],
-    ['Стоимость владения', money(TCO) + ' ₸'],
     ['Освобождённые ставки', FTE.toFixed(1)]
   ].map(([k,v]) => `<div class="metric"><span>${k}</span><b>${v}</b></div>`).join('');
   note.hidden = true;
-  return {
-    ok:true, M, n, Ch, Hm, L, Sm, I0, Gross, Om, B_m, FTE, TCO,
-    gross:Math.round(Gross), b_m:Math.round(B_m),
-    roi: I0 > 0 ? Math.round(ROI_n * 1000) / 10 : null,
-    payback: I0 > 0 ? Math.round(Payback * 10) / 10 : null
-  };
+  return { ok:true, M, Ch, Hm, L, Sm, Gross, Om, B_m, FTE, gross:Math.round(Gross), b_m:Math.round(B_m) };
 }
 
 let savedModel = null;
-['managers','horizon','ch','hm','load','sm','i0'].forEach(id => {
+['managers','ch','hm','load','sm'].forEach(id => {
   document.getElementById(id).addEventListener('input', () => {
     savedModel = null;
     document.getElementById('pdfBtn').disabled = true;
@@ -389,18 +352,13 @@ document.getElementById('pdfBtn').onclick = async () => {
   const when = new Date().toLocaleString('ru-RU');
   const rows = [
     ['Менеджеры на входящих', String(model.M)],
-    ['Горизонт', model.n + ' мес.'],
     ['Стоимость часа', money(model.Ch) + ' ₸'],
     ['Часы, которые снимает автоматизация', String(model.Hm)],
     ['Фактическая загрузка', String(model.L)],
     ['Прочая выгода', money(model.Sm) + ' ₸/мес'],
-    ['Разовая затрата', money(model.I0) + ' ₸'],
     ['Валовая экономия', money(model.Gross) + ' ₸/мес'],
-    ['Операционные затраты (16%)', money(model.Om) + ' ₸/мес'],
+    ['Месяц, 16%', money(model.Om) + ' ₸'],
     ['Чистая выгода', money(model.B_m) + ' ₸/мес'],
-    ['Окупаемость', model.payback == null ? 'нет разового платежа' : model.payback.toFixed(1) + ' мес.'],
-    ['ROI за горизонт', model.roi == null ? 'нет разового платежа' : model.roi.toFixed(1) + '%'],
-    ['Стоимость владения', money(model.TCO) + ' ₸'],
     ['Освобождённые ставки', model.FTE.toFixed(1)]
   ];
   document.getElementById('report').innerHTML =
@@ -409,7 +367,7 @@ document.getElementById('pdfBtn').onclick = async () => {
     (company ? '<p>Компания: ' + company.replace(/[&<>]/g, '') + '</p>' : '<p>Открытая модель. Вводные задал автор этого файла.</p>') +
     '<p style="color:#6b6760;font-size:13px">' + when + '</p>' +
     '<table>' + rows.map(([k,v]) => '<tr><td>' + k + '</td><td>' + v + '</td></tr>').join('') + '</table>' +
-    '<p style="font-size:13px;color:#6b6760">Валовая экономия = часы × менеджеры × ставка часа × загрузка + прочая выгода. Операционные затраты = 16% валовой экономии. Чистая выгода = валовая минус операционные затраты. Окупаемость = внедрение / чистая выгода. ROI = (чистая выгода × горизонт − внедрение) / внедрение. Стоимость владения = внедрение + операционные затраты × горизонт. Ставки = (часы / (168 × загрузка)) × менеджеры.</p>' +
+    '<p style="font-size:13px;color:#6b6760">Валовая экономия = часы × менеджеры × ставка часа × загрузка + прочая выгода. Месяц = 16% валовой экономии. Чистая выгода = валовая минус месяц. Ставки = (часы / (168 × загрузка)) × менеджеры.</p>' +
     '<p style="font-size:13px;margin-top:10px">Antimatter не подставляет внутренние цифры компании. Этот файл собран на открытом калькуляторе.</p>';
   const btn = document.getElementById('pdfBtn');
   btn.disabled = true;
@@ -485,38 +443,6 @@ document.getElementById('prodBtn').onclick = async () => {
   }
 };
 
-document.getElementById('preBtn').onclick = async () => {
-  if (!document.getElementById('acceptOffer').checked) { msg('preMsg','err','Отметьте принятие условий.'); return; }
-  const model = calc();
-  const client = {
-    name: document.getElementById('pName').value.trim(),
-    company: document.getElementById('pCompany').value.trim(),
-    phone: document.getElementById('pPhone').value.trim(),
-    email: document.getElementById('pEmail').value.trim()
-  };
-  if (client.phone.replace(/\D/g,'').length < 10 || !client.company) {
-    msg('preMsg','err','Нужны компания и телефон.');
-    return;
-  }
-  const btn = document.getElementById('preBtn');
-  btn.disabled = true;
-  try {
-    const r = await fetch(CONFIG.API + '/preorder', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        client,
-        inputs: model.ok ? { hours: model.Hm, staff: model.M, rate: model.Ch, load: model.L, other: model.Sm } : null
-      })
-    });
-    const j = await r.json();
-    if (!j.ok) { msg('preMsg','err','Заявка не принята.'); btn.disabled = false; return; }
-    const code = j.order_id ? (' Код заказа ' + j.order_id + '.') : '';
-    msg('preMsg','ok', (j.message || 'Заявка принята.') + code + ' Укажите этот код при оплате 89 000 тенге. Цифры калькулятора на момент кода фиксируются и потом не снижаются.');
-  } catch (e) {
-    msg('preMsg','err','Сеть: ' + e.message);
-    btn.disabled = false;
-  }
-};
 </script>
 </body>
 </html>

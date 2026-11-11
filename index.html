@@ -48,6 +48,8 @@ button,.wa{border:0;border-radius:10px;padding:12px 16px;font-family:var(--font)
 .slot{text-align:left;background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px 12px}
 .slot.on{border-color:var(--blue);background:var(--blue-l)}
 .note{font-size:12px;color:var(--ink2);margin-top:8px}
+.plain{margin:8px 0 14px 18px;color:var(--ink);font-size:15px}
+.plain li{margin:6px 0}
 .stale{opacity:.45}
 #calcNote.stale-note{background:var(--amber-l);color:#78350f;border-radius:10px;padding:12px}
 .ok{background:var(--green-l);color:#14532d;border-radius:10px;padding:12px;margin-top:10px}
@@ -75,7 +77,7 @@ footer{margin-top:28px;font-size:12px;color:var(--ink3);display:flex;justify-con
 
   <h1>Посчитайте, сколько стоит медленный ответ клиенту</h1>
   <p class="lead">Вводные меняете сами. Цифра появляется после кнопки «Посчитать». Отчёт скачивается после этого расчёта. Ниже открывается копия продукта: 7 дней на вашем канале, долю новых диалогов выбираете ползунком, затем один полный месяц вперёд.</p>
-  <p class="warn">Цифры калькулятора задаёте вы. База месяца фиксируется кодом заказа и потом не снижается. Отдельной платы за интеграцию нет.</p>
+  <p class="warn">Цифры вводите вы. Если посчитаете несколько раз, в оплату войдёт самая большая сумма.</p>
 
   <div class="grid">
     <section class="card">
@@ -106,14 +108,16 @@ footer{margin-top:28px;font-size:12px;color:var(--ink3);display:flex;justify-con
 
   <div class="paths">
     <section class="card wide" id="product">
-      <h2>Продукт: входящие WhatsApp и Instagram</h2>
-      <p class="note">Копия отвечает на входящие вашей компании. После канала есть 7 дней. Ползунок в кабинете задаёт, какую долю новых диалогов берёт помощник. Остальные остаются непрочитанными у вас в телефоне. На один диалог хватает ответов: 24, если вопросы короткие, и 60, если обсуждение длинное. Когда они кончаются, помощник передаёт коллеге, а не замолкает. Это образец, не первый месяц: из счёта он не вычитается. Дальше один полный месяц вперёд, 16% экономии из калькулятора. Платы за интеграцию нет ни в кабинете, ни на созвоне.</p>
-      <p class="note">Канал можно подключить самому в кабинете или на созвоне, где это сделают за вас. Цена от выбора не меняется. Письмо, которым LeadGen написал первым, копию и ответы не включает: нужны компания, телефон, пароль, цифры калькулятора и проверка, что это человек.</p>
-      <p class="note">Для одного телефона сохраняется и используется только наибольший расчёт. Меньшая сумма, отправленная позже, цену не снижает.</p>
+      <h2>Входящие сообщения</h2>
+      <ul class="plain">
+        <li>Помощник отвечает вашим клиентам в WhatsApp и Instagram.</li>
+        <li>Семь дней можно попробовать. Эти дни из оплаты не вычитаются.</li>
+        <li>Дальше платите один месяц вперёд. Сумма — «Месяц» из расчёта выше.</li>
+        <li>Номер подключаете сами или на созвоне. Цена одна.</li>
+      </ul>
       <p class="note" id="pricePeak"></p>
-      <label class="check"><input type="radio" name="connectWay" value="instruction" checked> Подключу сам в кабинете</label>
-      <label class="check"><input type="radio" name="connectWay" value="call"> Нужен созвон, канал подключат за меня</label>
-      <label class="check"><input type="checkbox" id="acceptOfferProduct"> Принимаю публичную оферту. Этого текста достаточно: отдельной платы за подключение нет.</label>
+      <label class="check"><input type="radio" name="connectWay" value="instruction" checked> Подключу сам</label>
+      <label class="check"><input type="radio" name="connectWay" value="call" > Пусть подключат на созвоне</label>
       <div id="prodTurnstile"></div>
       <div class="field"><label>Имя</label><input id="prodName"></div>
       <div class="field"><label>Компания</label><input id="prodCompany"></div>
@@ -125,7 +129,7 @@ footer{margin-top:28px;font-size:12px;color:var(--ink3);display:flex;justify-con
     </section>
     <section class="card" id="book">
       <h2>Созвон на 30 минут</h2>
-      <p class="note">Слот удерживается 10 минут после выбора. Подтверждение — отдельным шагом.</p>
+      <p class="note">Выберите время. Место держится 10 минут, потом его нужно подтвердить.</p>
       <div class="field"><label>Телефон</label><input id="bookPhone" placeholder="+7 777 000 00 00"></div>
       <div id="turnstile"></div>
       <div class="slots" id="slotList">Загрузка слотов…</div>
@@ -138,7 +142,7 @@ footer{margin-top:28px;font-size:12px;color:var(--ink3);display:flex;justify-con
 
   <footer>
     <div>Antimatter · Костанай</div>
-    <div>Образец — 7 дней с подключения канала. Долю новых диалогов выбираете в кабинете. Первый месяц оплачивается вперёд целиком.</div>
+    <div>Семь дней пробы с подключения номера. Потом один месяц вперёд.</div>
   </footer>
 </div>
 <article id="report" aria-hidden="true"></article>
@@ -405,10 +409,6 @@ document.getElementById('prodBtn').onclick = async () => {
     msg('prodMsg','err','Пароль короче 8 символов.');
     return;
   }
-  if (!document.getElementById('acceptOfferProduct').checked) {
-    msg('prodMsg','err','Отметьте принятие оферты.');
-    return;
-  }
   if (!CONFIG.TURNSTILE_SITE_KEY || !productTurnstileToken) {
     msg('prodMsg','err','Подтвердите, что вы не робот.');
     return;
@@ -427,7 +427,6 @@ document.getElementById('prodBtn').onclick = async () => {
         password: client.password,
         connect_preference: way,
         turnstile_token: productTurnstileToken,
-        offer_accepted: true,
         inputs: { hours: model.Hm, staff: model.M, rate: model.Ch, load: model.L, other: model.Sm }
       })
     });
